@@ -19,9 +19,10 @@ public class StaticTextSkill
 
     [SKFunction("Append the day variable")]
     [SKFunctionInput(Description = "Text to append to")]
+    //[SKFunctionContextParameter(Name = "year", Description = "Value of the year to append")]
     [SKFunctionContextParameter(Name = "day", Description = "Value of the day to append")]
     public static string AppendDay(string input, SKContext context)
     {
-        return input + context["day"];
+        return input + context["year"] + "年" + context["day"];
     }
 }

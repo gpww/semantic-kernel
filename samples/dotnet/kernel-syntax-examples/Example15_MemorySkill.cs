@@ -89,15 +89,15 @@ public static class Example15_MemorySkill
 
         // Build a semantic function that uses memory to find facts
         const string RecallFunctionDefinition = @"
-Consider only the facts below when answering questions.
+            Consider only the facts below when answering questions.
 
-About me: {{recall 'where did I grow up?'}}
-About me: {{recall 'where do I live?'}}
+            About me: {{recall 'where did I grow up?'}}
+            About me: {{recall 'where do I live?'}}
 
-Question: {{$query}}
+            Question: {{$query}}
 
-Answer:
-";
+            Answer:
+            ";
 
         var aboutMeOracle = kernel.CreateSemanticFunction(RecallFunctionDefinition, maxTokens: 100);
 

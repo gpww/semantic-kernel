@@ -44,8 +44,7 @@ public class SkillCollection : ISkillCollection
     }
 
     /// <inheritdoc/>
-    public ISKFunction GetFunction(string functionName) =>
-        this.GetFunction(GlobalSkill, functionName);
+    public ISKFunction GetFunction(string functionName) => this.GetFunction(GlobalSkill, functionName);
 
     /// <inheritdoc/>
     public ISKFunction GetFunction(string skillName, string functionName)

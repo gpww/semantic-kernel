@@ -154,7 +154,7 @@ public class LocalExampleSkill
 
         Console.WriteLine($"Running function type 6 [{summary}]");
         return "";
-    }
+    }///native function 也可以call SK function
 
     [SKFunction("Native function type 7")]
     [SKFunctionName("Type07")]

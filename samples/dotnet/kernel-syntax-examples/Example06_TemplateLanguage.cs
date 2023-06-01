@@ -27,13 +27,13 @@ public static class Example06_TemplateLanguage
 
         // Semantic Function invoking time.Date and time.Time native functions
         const string FunctionDefinition = @"
-Today is: {{time.Date}}
-Current time is: {{time.Time}}
+        Today is: {{time.Date}}
+        Current time is: {{time.Time}}
 
-Answer to the following questions using JSON syntax, including the data used.
-Is it morning, afternoon, evening, or night (morning/afternoon/evening/night)?
-Is it weekend time (weekend/not weekend)?
-";
+        Answer to the following questions using JSON syntax, including the data used.
+        Is it morning, afternoon, evening, or night (morning/afternoon/evening/night)?
+        Is it weekend time (weekend/not weekend)?
+        ";
 
         // This allows to see the prompt before it's sent to OpenAI
         Console.WriteLine("--- Rendered Prompt");

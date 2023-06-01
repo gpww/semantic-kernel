@@ -21,10 +21,8 @@ public static class Example11_WebSearchQueries
 
         // Run
         var ask = "What's the tallest building in Europe?";
-        var result = await kernel.RunAsync(
-            ask,
-            bing["BingSearchUrl"]
-        );
+        //var result = await kernel.RunAsync(ask,bing["bingSearchUrl"]);//function name的大小写是不敏感的
+        var result = await kernel.Func("search", "bingSearchUrl").InvokeAsync(ask);
 
         Console.WriteLine(ask + "\n");
         Console.WriteLine(result);

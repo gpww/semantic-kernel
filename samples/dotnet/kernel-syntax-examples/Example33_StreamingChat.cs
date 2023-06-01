@@ -16,7 +16,7 @@ public static class Example33_StreamingChat
 {
     public static async Task RunAsync()
     {
-        await AzureOpenAIChatStreamSampleAsync();
+        //await AzureOpenAIChatStreamSampleAsync();
         await OpenAIChatStreamSampleAsync();
     }
 

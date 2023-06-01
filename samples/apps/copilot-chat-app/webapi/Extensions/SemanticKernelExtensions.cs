@@ -26,7 +26,7 @@ internal static class SemanticKernelExtensions
         // Load the chat skill's prompts from the prompt configuration file.
         services.AddSingleton<PromptsConfig>(sp =>
         {
-            string promptsConfigPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "prompts.json");
+            string promptsConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "prompts.json");//读取所有prompts
             PromptsConfig promptsConfig = JsonSerializer.Deserialize<PromptsConfig>(File.ReadAllText(promptsConfigPath)) ??
                                           throw new InvalidOperationException($"Failed to load '{promptsConfigPath}'.");
             promptsConfig.Validate();
@@ -93,14 +93,6 @@ internal static class SemanticKernelExtensions
                     sp.GetRequiredService<IMemoryStore>(),
                     sp.GetRequiredService<IOptionsSnapshot<AIServiceOptions>>().Get(AIServiceOptions.EmbeddingPropertyName)
                         .ToTextEmbeddingsService(logger: sp.GetRequiredService<ILogger<AIServiceOptions>>())));
-                break;
-
-            case MemoriesStoreOptions.MemoriesStoreType.AzureCognitiveSearch:
-                if (config.AzureCognitiveSearch == null)
-                {
-                    throw new InvalidOperationException("MemoriesStore type is AzureCognitiveSearch and AzureCognitiveSearch configuration is null.");
-                }
-                services.AddSingleton<ISemanticTextMemory>(sp => new AzureCognitiveSearchMemory(config.AzureCognitiveSearch.Endpoint, config.AzureCognitiveSearch.Key));
                 break;
 
             default:

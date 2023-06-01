@@ -1,0 +1,107 @@
+{
+    "skillName": "ChatSkill",
+    "functionName": "IsMeaningfulQuestion",
+    "description": "检查从用户语音识别到的问题是否是有效问题",
+    "filePath": "samples\\skills\\ChatSkill\\IsMeaningfulQuestion\\skprompt.txt",
+    "results": [
+        {
+            "completionConfig": {
+                "label": "gpt-3.5-turbo-0301",
+                "aiService": "OpenAI",
+                "deploymentOrModelId": "gpt-3.5-turbo",
+                "endpoint": null,
+                "useCustomEndpoint": false,
+                "endpointType": "chat-completion",
+                "chatSystemMessage": "You are an AI assistant that helps people find information."
+            },
+            "requestSettings": {
+                "temperature": 0,
+                "topP": 0,
+                "presencePenalty": 0,
+                "frequencyPenalty": 0,
+                "maxTokens": 0,
+                "stopSequences": []
+            },
+            "variables": [
+                {
+                    "key": "input",
+                    "value": "天狼星是啥？"
+                }
+            ],
+            "output": {
+                "prompt": "判断Input是不是一个有意义的提问: 如果是, 回答true; 如果不是, 回答false\n    [EXAMPLE 1]\n    Input: 虚幻引擎的原理\n    Answer: true\n\n    [EXAMPLE 2]\n    Input: what's the biggest lake in Italy? What's the smallest positive number?\n    Answer: true\n\n    [EXAMPLE 3]\n    Input: 我\n    Answer: false\n\n    [EXAMPLE 4]\n    Input: 重新说...等下\n    Answer: false\n\n    [EXAMPLE 5]\n    Input: 我想想\n    Answer: false\n\n    [END OF EXAMPLES]\n\n    [TASK]\n    Input: 天狼星是啥？.\n    Answer: ",
+                "durationInMilliseconds": 4680.3905,
+                "inputTokens": 177,
+                "outputTokens": 1,
+                "result": "true",
+                "chatCompletionResult": "true"
+            }
+        },
+        {
+            "completionConfig": {
+                "label": "gpt-3.5-turbo-0301",
+                "aiService": "OpenAI",
+                "deploymentOrModelId": "gpt-3.5-turbo",
+                "endpoint": null,
+                "useCustomEndpoint": false,
+                "endpointType": "chat-completion",
+                "chatSystemMessage": "You are an AI assistant that helps people find information."
+            },
+            "requestSettings": {
+                "temperature": 0,
+                "topP": 0,
+                "presencePenalty": 0,
+                "frequencyPenalty": 0,
+                "maxTokens": 0,
+                "stopSequences": []
+            },
+            "variables": [
+                {
+                    "key": "input",
+                    "value": "天狼星"
+                }
+            ],
+            "output": {
+                "prompt": "判断Input是不是一个有意义的提问: 如果是, 回答true; 如果不是, 回答false\n    [EXAMPLE 1]\n    Input: 虚幻引擎的原理\n    Answer: true\n\n    [EXAMPLE 2]\n    Input: what's the biggest lake in Italy? What's the smallest positive number?\n    Answer: true\n\n    [EXAMPLE 3]\n    Input: 我\n    Answer: false\n\n    [EXAMPLE 4]\n    Input: 重新说...等下\n    Answer: false\n\n    [EXAMPLE 5]\n    Input: 我想想\n    Answer: false\n\n    [END OF EXAMPLES]\n\n    [TASK]\n    Input: 天狼星.\n    Answer: ",
+                "durationInMilliseconds": 1031.3105,
+                "inputTokens": 173,
+                "outputTokens": 1,
+                "result": "false",
+                "chatCompletionResult": "false"
+            }
+        },
+        {
+            "completionConfig": {
+                "label": "gpt-3.5-turbo-0301",
+                "aiService": "OpenAI",
+                "deploymentOrModelId": "gpt-3.5-turbo",
+                "endpoint": null,
+                "useCustomEndpoint": false,
+                "endpointType": "chat-completion",
+                "chatSystemMessage": "You are an AI assistant that helps people find information."
+            },
+            "requestSettings": {
+                "temperature": 0,
+                "topP": 0,
+                "presencePenalty": 0,
+                "frequencyPenalty": 0,
+                "maxTokens": 0,
+                "stopSequences": []
+            },
+            "variables": [
+                {
+                    "key": "input",
+                    "value": "你好"
+                }
+            ],
+            "output": {
+                "prompt": "判断Input是不是一个有意义的提问: 如果是, 回答true; 如果不是, 回答false\n    [EXAMPLE 1]\n    Input: 虚幻引擎的原理\n    Answer: true\n\n    [EXAMPLE 2]\n    Input: what's the biggest lake in Italy? What's the smallest positive number?\n    Answer: true\n\n    [EXAMPLE 3]\n    Input: 我\n    Answer: false\n\n    [EXAMPLE 4]\n    Input: 重新说...等下\n    Answer: false\n\n    [EXAMPLE 5]\n    Input: 我想想\n    Answer: false\n\n    [END OF EXAMPLES]\n\n    [TASK]\n    Input: 你好.\n    Answer: ",
+                "durationInMilliseconds": 1635.8703,
+                "inputTokens": 170,
+                "outputTokens": 1,
+                "result": "false",
+                "chatCompletionResult": "false"
+            }
+        }
+    ]
+}

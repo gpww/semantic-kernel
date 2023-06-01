@@ -31,6 +31,7 @@ public class SearchUrlSkill
     /// <summary>
     /// Get search URL for Bing
     /// </summary>
+    [SKFunctionName("BingSearchUrl")]
     [SKFunction("Return URL for Bing search query.")]
     [SKFunctionInput(Description = "Text to search for")]
     public string BingSearchUrl(string query)

@@ -1,11 +1,12 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
+using System.IO;
 using System.Linq;
 using Microsoft.SemanticKernel.Planning;
 
 namespace RepoUtils;
 
-internal static class PlanExtensions
+internal static class Extensions
 {
     internal static string ToPlanString(this Plan originalPlan, string indent = " ")
     {
@@ -40,5 +41,13 @@ internal static class PlanExtensions
         }));
 
         return goalHeader + stepItems;
+    }
+    internal static string GetParentDirectory(this string path, int n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            path = Directory.GetParent(path).ToString();
+        }
+        return path;
     }
 }

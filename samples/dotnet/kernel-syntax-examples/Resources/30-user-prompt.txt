@@ -1,1 +1,1 @@
-{{ time.now }}: {{ $userMessage }}
+User Prompt: {{ time.now }}: {{ $userMessage }}

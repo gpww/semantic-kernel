@@ -1,0 +1,26 @@
+判断Input是不是一个有意义的提问: 如果是, 回答true; 如果不是, 回答false
+    [EXAMPLE 1]
+    Input: 虚幻引擎的原理
+    Answer: true
+
+    [EXAMPLE 2]
+    Input: what's the biggest lake in Italy? What's the smallest positive number?
+    Answer: true
+
+    [EXAMPLE 3]
+    Input: 我
+    Answer: false
+
+    [EXAMPLE 4]
+    Input: 重新说...等下
+    Answer: false
+
+    [EXAMPLE 5]
+    Input: 我想想
+    Answer: false
+
+    [END OF EXAMPLES]
+
+    [TASK]
+    Input: {{ $input }}.
+    Answer: 

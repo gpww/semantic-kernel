@@ -183,10 +183,8 @@ internal static class Example12_SequentialPlanner
     private static IKernel InitializeKernelAndPlanner(out SequentialPlanner planner, int maxTokens = 1024)
     {
         var kernel = new KernelBuilder().WithLogger(ConsoleLogger.Log).Build();
-        kernel.Config.AddAzureTextCompletionService(
-            Env.Var("AZURE_OPENAI_DEPLOYMENT_NAME"),
-            Env.Var("AZURE_OPENAI_ENDPOINT"),
-            Env.Var("AZURE_OPENAI_KEY"));
+        kernel.Config.AddOpenAIChatCompletionService("gpt-3.5-turbo",
+            Env.Var("OPENAI_API_KEY"));
 
         planner = new SequentialPlanner(kernel, new SequentialPlannerConfig { MaxTokens = maxTokens });
 

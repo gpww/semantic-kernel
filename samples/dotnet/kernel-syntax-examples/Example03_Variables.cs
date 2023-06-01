@@ -22,7 +22,8 @@ public static class Example03_Variables
         var text = kernel.ImportSkill(new StaticTextSkill(), "text");
 
         var variables = new ContextVariables("Today is: ");
-        variables.Set("day", DateTimeOffset.Now.ToString("dddd", CultureInfo.CurrentCulture));
+        variables.Set("day", DateTimeOffset.Now.ToString("MM月dd日 HH:mm:ss(zzz)", CultureInfo.CurrentCulture));
+        variables.Set("year", DateTimeOffset.Now.ToString("yyyy", CultureInfo.CurrentCulture));
 
         SKContext result = await kernel.RunAsync(variables,
             text["AppendDay"],

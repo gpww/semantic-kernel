@@ -40,10 +40,4 @@ public class MemoriesStoreOptions
     /// </summary>
     [RequiredOnPropertyValue(nameof(Type), MemoriesStoreType.Qdrant)]
     public QdrantOptions? Qdrant { get; set; }
-
-    /// <summary>
-    /// Gets or sets the configuration for the Azure Cognitive Search memories store.
-    /// </summary>
-    [RequiredOnPropertyValue(nameof(Type), MemoriesStoreType.AzureCognitiveSearch)]
-    public AzureCognitiveSearchOptions? AzureCognitiveSearch { get; set; }
 }

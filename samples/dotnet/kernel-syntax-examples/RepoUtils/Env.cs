@@ -17,22 +17,6 @@ internal sealed class Env
     /// <returns>Value found in Secret Manager or Environment Variable</returns>
     internal static string Var(string name)
     {
-        var configuration = new ConfigurationBuilder()
-            .AddUserSecrets<Env>()
-            .Build();
-
-        var value = configuration[name];
-        if (!string.IsNullOrEmpty(value))
-        {
-            return value;
-        }
-
-        value = Environment.GetEnvironmentVariable(name);
-        if (string.IsNullOrEmpty(value))
-        {
-            throw new YourAppException($"Secret / Env var not set: {name}");
-        }
-
-        return value;
+        return ConfigFile.Settings[name];
     }
 }

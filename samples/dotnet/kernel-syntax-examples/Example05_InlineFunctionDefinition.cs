@@ -25,17 +25,17 @@ public static class Example05_InlineFunctionDefinition
 
         // Function defined using few-shot design pattern
         const string FunctionDefinition = @"
-Generate a creative reason or excuse for the given event.
-Be creative and be funny. Let your imagination run wild.
+        Generate a creative reason or excuse for the given event.
+        Be creative and be funny. Let your imagination run wild.
 
-Event: I am running late.
-Excuse: I was being held ransom by giraffe gangsters.
+        Event: I am running late.
+        Excuse: I was being held ransom by giraffe gangsters.
 
-Event: I haven't been to the gym for a year
-Excuse: I've been too busy training my pet dragon.
+        Event: I haven't been to the gym for a year
+        Excuse: I've been too busy training my pet dragon.
 
-Event: {{$input}}
-";
+        Event: {{$input}}
+        ";
 
         var excuseFunction = kernel.CreateSemanticFunction(FunctionDefinition, maxTokens: 100, temperature: 0.4, topP: 1);
 

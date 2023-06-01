@@ -91,12 +91,12 @@ public static class Example30_ChatWithPrompts
         // Render the system prompt. This string is used to configure the chat.
         // This contains the context, ie a piece of a wikipedia page selected by the user.
         string systemMessage = await promptRenderer.RenderAsync(systemPromptTemplate, context);
-        Console.WriteLine($"------------------------------------\n{systemMessage}");
+        Console.WriteLine($"systemMessage------------------------------------\n{systemMessage}");
 
         // Render the user prompt. This string is the query sent by the user
         // This contains the user request, ie "extract locations as a bullet point list"
         string userMessage = await promptRenderer.RenderAsync(userPromptTemplate, context);
-        Console.WriteLine($"------------------------------------\n{userMessage}");
+        Console.WriteLine($"userMessage------------------------------------\n{userMessage}");
 
         // Client used to request answers to gpt-3.5-turbo
         var chatGPT = kernel.GetService<IChatCompletion>();
@@ -111,7 +111,7 @@ public static class Example30_ChatWithPrompts
 
         // Finally, get the response from AI
         string answer = await chatGPT.GenerateMessageAsync(chatHistory);
-        Console.WriteLine($"------------------------------------\n{answer}");
+        Console.WriteLine($"answer------------------------------------\n{answer}");
 
         /*
 

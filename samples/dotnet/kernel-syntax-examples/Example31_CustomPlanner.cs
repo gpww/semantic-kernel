@@ -95,9 +95,9 @@ internal static class Example31_CustomPlanner
             "I have a cat named Butters.",
         };
 
-        foreach (var memoryToSave in memoriesToSave)
+        foreach (var m in memoriesToSave)
         {
-            await kernel.Memory.SaveInformationAsync("contextQueryMemories", memoryToSave, Guid.NewGuid().ToString());
+            await kernel.Memory.SaveInformationAsync("contextQueryMemories", m, Guid.NewGuid().ToString());
         }
     }
 
@@ -121,17 +121,10 @@ internal static class Example31_CustomPlanner
         return new KernelBuilder()
             .WithLogger(ConsoleLogger.Log)
             .Configure(
-                config =>
+                c =>
                 {
-                    config.AddAzureTextCompletionService(
-                        Env.Var("AZURE_OPENAI_DEPLOYMENT_NAME"),
-                        Env.Var("AZURE_OPENAI_ENDPOINT"),
-                        Env.Var("AZURE_OPENAI_KEY"));
-
-                    config.AddAzureTextEmbeddingGenerationService(
-                        Env.Var("AZURE_OPENAI_EMBEDDINGS_DEPLOYMENT_NAME"),
-                        Env.Var("AZURE_OPENAI_EMBEDDINGS_ENDPOINT"),
-                        Env.Var("AZURE_OPENAI_EMBEDDINGS_KEY"));
+                    c.AddOpenAIChatCompletionService("gpt-3.5-turbo", Env.Var("OPENAI_API_KEY"));
+                    c.AddOpenAITextEmbeddingGenerationService("text-embedding-ada-002", Env.Var("OPENAI_API_KEY"));
                 })
             .WithMemoryStorage(new VolatileMemoryStore())
             .Build();

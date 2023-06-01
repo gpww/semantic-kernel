@@ -43,8 +43,8 @@ public sealed class Program
         // Configure middleware and endpoints
         WebApplication app = builder.Build();
         app.UseCors();
-        app.UseAuthentication();
-        app.UseAuthorization();
+        //app.UseAuthentication();
+        //app.UseAuthorization();
         app.MapControllers();
 
         // Enable Swagger for development environments.

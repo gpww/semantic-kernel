@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Orchestration;
@@ -9,6 +10,7 @@ using Microsoft.SemanticKernel.Skills.OpenAPI.Authentication;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RepoUtils;
+using SharpYaml.Model;
 
 /// <summary>
 /// Import and run GitHub Functions using OpenAPI Skill.
@@ -32,9 +34,11 @@ public static class Example23_OpenApiSkill_GitHub
     {
         var kernel = new KernelBuilder().WithLogger(ConsoleLogger.Log).Build();
 
+        var path = Directory.GetCurrentDirectory().GetParentDirectory(3);
+        var file = System.IO.Path.Combine(path, "Skills\\GitHubSkill\\openapi.json");
         var skill = await kernel.ImportOpenApiSkillFromFileAsync(
             "GitHubSkill",
-            "../../../samples/apps/copilot-chat-app/webapi/Skills/OpenApiSkills/GitHubSkill/openapi.json",
+            file,
             authenticationProvider.AuthenticateRequestAsync);
 
         // Add arguments for required parameters, arguments for optional ones can be skipped.
@@ -64,10 +68,11 @@ public static class Example23_OpenApiSkill_GitHub
     public static async Task GetPullRequestFromGitHubAsync(BearerAuthenticationProvider authenticationProvider, string pullNumber)
     {
         var kernel = new KernelBuilder().WithLogger(ConsoleLogger.Log).Build();
-
+        var path = Directory.GetCurrentDirectory().GetParentDirectory(3);
+        var file = System.IO.Path.Combine(path, "Skills\\GitHubSkill\\openapi.json");
         var skill = await kernel.ImportOpenApiSkillFromFileAsync(
             "GitHubSkill",
-            "../../../samples/apps/copilot-chat-app/webapi/Skills/OpenApiSkills/GitHubSkill/openapi.json",
+            file,
             authenticationProvider.AuthenticateRequestAsync);
 
         // Add arguments for required parameters, arguments for optional ones can be skipped.

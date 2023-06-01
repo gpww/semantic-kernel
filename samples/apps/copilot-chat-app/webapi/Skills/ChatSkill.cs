@@ -92,8 +92,7 @@ public class ChatSkill
     public async Task<string> ExtractUserIntentAsync(SKContext context)
     {
         var tokenLimit = this._promptSettings.CompletionTokenLimit;
-        var historyTokenBudget =
-            tokenLimit -
+        var historyTokenBudget = tokenLimit -
             this._promptSettings.ResponseTokenLimit -
             Utilities.TokenCount(string.Join("\n", new string[]
                 {

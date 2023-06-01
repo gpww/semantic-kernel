@@ -24,7 +24,7 @@ public static class Example20_HuggingFace
 
         const string FunctionDefinition = "Question: {{$input}}; Answer:";
 
-        var questionAnswerFunction = kernel.CreateSemanticFunction(FunctionDefinition);
+        var questionAnswerFunction = kernel.CreateSemanticFunction(FunctionDefinition, maxTokens: 512);
 
         var result = await questionAnswerFunction.InvokeAsync("What is New York?");
 

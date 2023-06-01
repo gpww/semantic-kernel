@@ -174,21 +174,6 @@ internal static class ServicesExtensions
                 break;
             }
 
-            case ChatStoreOptions.ChatStoreType.Cosmos:
-            {
-                if (chatStoreConfig.Cosmos == null)
-                {
-                    throw new InvalidOperationException("ChatStore:Cosmos is required when ChatStore:Type is 'Cosmos'");
-                }
-#pragma warning disable CA2000 // Dispose objects before losing scope - objects are singletons for the duration of the process and disposed when the process exits.
-                chatSessionInMemoryContext = new CosmosDbContext<ChatSession>(
-                    chatStoreConfig.Cosmos.ConnectionString, chatStoreConfig.Cosmos.Database, chatStoreConfig.Cosmos.ChatSessionsContainer);
-                chatMessageInMemoryContext = new CosmosDbContext<ChatMessage>(
-                    chatStoreConfig.Cosmos.ConnectionString, chatStoreConfig.Cosmos.Database, chatStoreConfig.Cosmos.ChatMessagesContainer);
-#pragma warning restore CA2000 // Dispose objects before losing scope
-                break;
-            }
-
             default:
             {
                 throw new InvalidOperationException(
