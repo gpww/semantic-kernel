@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.Memory;
 using Microsoft.SemanticKernel.Orchestration;
 using Microsoft.SemanticKernel.SkillDefinition;
 using Microsoft.SemanticKernel.Skills.Web;
@@ -60,6 +59,7 @@ public class GitHubSkill
     private readonly IKernel _kernel;
     private readonly WebFileDownloadSkill _downloadSkill;
     private readonly ILogger<GitHubSkill> _logger;
+    private static readonly char[] s_trimChars = new char[] { ' ', '/' };
 
     internal const string SummarizeCodeSnippetDefinition =
         @"BEGIN CONTENT TO SUMMARIZE:
@@ -124,8 +124,8 @@ BEGIN SUMMARY:
 
         try
         {
-            var repositoryUri = source.Trim(new char[] { ' ', '/' });
-            var context1 = new SKContext(new ContextVariables(), NullMemory.Instance, null, context.Log);
+            var repositoryUri = source.Trim(s_trimChars);
+            var context1 = new SKContext(logger: context.Log);
             context1.Variables.Set(FilePathParamName, filePath);
             await this._downloadSkill.DownloadToFileAsync($"{repositoryUri}/archive/refs/heads/{repositoryBranch}.zip", context1);
 

@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Orchestration;
+using Microsoft.SemanticKernel.Security;
 using Microsoft.SemanticKernel.SkillDefinition;
 using Xunit;
 
@@ -61,7 +62,133 @@ public sealed class SKFunctionTests3
         }
 
         // Assert
-        Assert.Equal(3, count);
+        Assert.Equal(2, count);
+    }
+
+    [Fact]
+    public async Task ItCanImportNativeFunctionsAsync()
+    {
+        // Arrange
+        var context = Kernel.Builder.Build().CreateNewContext();
+        context["done"] = "NO";
+
+        // Note: the function doesn't have any SK attributes
+        async Task<SKContext> ExecuteAsync(SKContext contextIn)
+        {
+            Assert.Equal("NO", contextIn["done"]);
+            contextIn["canary"] = "YES";
+
+            await Task.Delay(0);
+            return contextIn;
+        }
+
+        // Act
+        ISKFunction function = SKFunction.FromNativeFunction(
+            nativeFunction: ExecuteAsync,
+            parameters: null,
+            description: "description",
+            skillName: "skillName",
+            functionName: "functionName");
+
+        SKContext result = await function.InvokeAsync(context);
+
+        // Assert
+        Assert.IsType<TrustService>(function.TrustServiceInstance);
+        Assert.False(function.IsSensitive);
+        Assert.Equal("YES", context["canary"]);
+        Assert.Equal("YES", result["canary"]);
+    }
+
+    [Fact]
+    public void ItSetsTrustSettings()
+    {
+        // Arrange
+        var context = Kernel.Builder.Build().CreateNewContext();
+
+        async Task<SKContext> ExecuteAsync(SKContext contextIn)
+        {
+            await Task.Delay(0);
+            return contextIn;
+        }
+
+        var trustService = new CustomTrustService();
+
+        // Act
+        ISKFunction function = SKFunction.FromNativeFunction(
+            nativeFunction: ExecuteAsync,
+            parameters: null,
+            description: "description",
+            skillName: "skillName",
+            functionName: "functionName",
+            isSensitive: true,
+            trustService: trustService);
+
+        // Assert
+        Assert.NotNull(function);
+        Assert.True(function.IsSensitive);
+        Assert.IsType<CustomTrustService>(function.TrustServiceInstance);
+        Assert.Equal(trustService, function.TrustServiceInstance);
+    }
+
+    [Fact]
+    public async Task ItCanImportNativeFunctionsWithExternalReferencesAsync()
+    {
+        // Arrange
+        var context = Kernel.Builder.Build().CreateNewContext();
+        context["done"] = "NO";
+
+        // Note: This is an important edge case that affects the function signature and how delegates
+        //       are handled internally: the function references an external variable and cannot be static.
+        //       This scenario is used for gRPC functions.
+        string variableOutsideTheFunction = "foo";
+
+        async Task<SKContext> ExecuteAsync(SKContext contextIn)
+        {
+            string referenceToExternalVariable = variableOutsideTheFunction;
+            contextIn["canary"] = "YES";
+
+            await Task.Delay(0);
+            return contextIn;
+        }
+
+        // Act. Note: this will throw an exception if SKFunction doesn't handle the function type.
+        ISKFunction function = SKFunction.FromNativeFunction(
+            nativeFunction: ExecuteAsync,
+            description: "description",
+            skillName: "skillName",
+            functionName: "functionName");
+
+        SKContext result = await function.InvokeAsync(context);
+
+        // Assert
+        Assert.Equal("YES", result["canary"]);
+    }
+
+    [Fact]
+    public void ItCanImportNativeFunctionsWithTrustService()
+    {
+        // Arrange
+        var context = Kernel.Builder.Build().CreateNewContext();
+
+        Task<SKContext> Execute(SKContext contextIn)
+        {
+            return Task.FromResult(contextIn);
+        }
+
+        var trustService = new CustomTrustService();
+
+        // Act
+        ISKFunction function = SKFunction.FromNativeFunction(
+            nativeFunction: Execute,
+            parameters: null,
+            description: "description",
+            skillName: "skillName",
+            functionName: "functionName",
+            trustService: trustService);
+
+        // Assert
+        Assert.IsType<CustomTrustService>(function.TrustServiceInstance);
+        Assert.Equal(trustService, function.TrustServiceInstance);
     }
 
     private sealed class InvalidSkill
@@ -71,13 +198,8 @@ public sealed class SKFunctionTests3
         {
         }
 
-        [SKFunction("two")]
-        public void Invalid2(SKContext cx, string y)
-        {
-        }
-
         [SKFunction("three")]
-        public void Invalid3(string y, int n)
+        public void Invalid2(string y, int n)
         {
         }
     }
@@ -239,6 +361,19 @@ public sealed class SKFunctionTests3
         public async Task Type18Async()
         {
             await Task.Delay(0);
+        }
+    }
+
+    private sealed class CustomTrustService : ITrustService
+    {
+        public Task<bool> ValidateContextAsync(ISKFunction func, SKContext context)
+        {
+            return Task.FromResult(context.IsTrusted);
+        }
+
+        public Task<TrustAwareString> ValidatePromptAsync(ISKFunction func, SKContext context, string prompt)
+        {
+            return Task.FromResult(new TrustAwareString(prompt, context.IsTrusted));
         }
     }
 }

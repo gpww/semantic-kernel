@@ -2,6 +2,32 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": ".NET Core Launch (CopilotChatWebApi)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build (CopilotChatWebApi)",
+      // If you have changed target frameworks, make sure to update the program path.
+      "program": "${workspaceFolder}/samples/apps/copilot-chat-app/webapi/bin/Debug/net6.0/CopilotChatWebApi.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/samples/apps/copilot-chat-app/webapi",
+      // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+      "console": "internalConsole",
+      "stopAtEntry": false
+    },
+    {
+      "name": ".NET Core Launch (CopilotChatWebApi)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build (CopilotChatWebApi)",
+      // If you have changed target frameworks, make sure to update the program path.
+      "program": "${workspaceFolder}/samples/apps/copilot-chat-app/webapi/bin/Debug/net6.0/CopilotChatWebApi.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/samples/apps/copilot-chat-app/webapi",
+      // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+      "console": "internalConsole",
+      "stopAtEntry": false
+    },
+    {
       "name": ".NET Core Launch (dotnet-kernel-syntax-examples)",
       "type": "coreclr",
       "request": "launch",

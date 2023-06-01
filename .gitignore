@@ -463,4 +463,10 @@ dist/
 # Peristant storage
 data/qdrant
 data/chatstore*
-/dotnet/ConfigFile/appsettings.json
+
+# Java build
+java/**/target
+java/.mvn/wrapper/maven-wrapper.jar
+
+# Java settings
+conf.properties

@@ -29,7 +29,7 @@ public class SKContextTests
     {
         // Arrange
         var variables = new ContextVariables();
-        var target = new SKContext(variables, NullMemory.Instance, this._skills.Object, this._log.Object);
+        var target = new SKContext(variables, skills: this._skills.Object, logger: this._log.Object);
         variables.Set("foo1", "bar1");
 
         // Act
@@ -64,6 +64,44 @@ public class SKContextTests
         Assert.Equal("ciao", result.Result);
     }
 
+    [Fact]
+    public void ItCanUntrustAll()
+    {
+        // Arrange
+        var variables = new ContextVariables();
+        var target = new SKContext(variables);
+
+        // Assert
+        Assert.True(target.IsTrusted);
+        AssertIsInputTrusted(target.Variables, true);
+
+        // Act
+        target.UntrustAll();
+
+        // Assert
+        Assert.False(target.IsTrusted);
+        AssertIsInputTrusted(target.Variables, false);
+    }
+
+    [Fact]
+    public void ItCanUntrustResult()
+    {
+        // Arrange
+        var variables = new ContextVariables();
+        var target = new SKContext(variables);
+
+        // Assert
+        Assert.True(target.IsTrusted);
+        AssertIsInputTrusted(target.Variables, true);
+
+        // Act
+        target.UntrustResult();
+
+        // Assert
+        Assert.False(target.IsTrusted);
+        AssertIsInputTrusted(target.Variables, false);
+    }
+
     private sealed class Parrot
     {
         [SKFunction("say something")]
@@ -72,5 +110,11 @@ public class SKContextTests
         {
             return text;
         }
+    }
+
+    private static void AssertIsInputTrusted(ContextVariables variables, bool expectedIsTrusted)
+    {
+        // Assert isTrusted matches
+        Assert.Equal(expectedIsTrusted, variables.Input.IsTrusted);
     }
 }

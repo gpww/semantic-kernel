@@ -33,11 +33,8 @@ internal static class Extensions
 
                 return $"{indent}{indent}- {string.Join(".", skillName, stepName)}{parameters}{outputs}";
             }
-            else
-            {
-                string nestedSteps = step.ToPlanString(indent + indent);
-                return nestedSteps;
-            }
+
+            return step.ToPlanString(indent + indent);
         }));
 
         return goalHeader + stepItems;
