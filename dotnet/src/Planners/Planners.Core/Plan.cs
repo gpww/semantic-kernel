@@ -31,6 +31,11 @@ public sealed class Plan
     public ContextVariables State { get; } = new();
 
     /// <summary>
+    /// 模版文本，用于计算token占用
+    /// </summary>
+    string ISKFunction.TemplateText { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+    /// <summary>
     /// Steps of the plan
     /// </summary>
     [JsonPropertyName("steps")]

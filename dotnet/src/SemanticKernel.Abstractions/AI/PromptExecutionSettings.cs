@@ -17,7 +17,7 @@ namespace Microsoft.SemanticKernel;
 /// if the service they are calling supports additional properties. For an example, please reference
 /// the Microsoft.SemanticKernel.Connectors.OpenAI.OpenAIPromptExecutionSettings implementation.
 /// </remarks>
-public class PromptExecutionSettings
+public partial class PromptExecutionSettings
 {
     /// <summary>
     /// Gets the default service identifier.

@@ -21,6 +21,7 @@ namespace Microsoft.SemanticKernel.Connectors.OpenAI;
 public sealed class AzureOpenAITextEmbeddingGenerationService : ITextEmbeddingGenerationService
 {
     private readonly AzureOpenAIClientCore _core;
+    public string ServiceName { get; set; }
 
     /// <summary>
     /// Creates a new <see cref="AzureOpenAITextEmbeddingGenerationService"/> client instance using API Key auth.

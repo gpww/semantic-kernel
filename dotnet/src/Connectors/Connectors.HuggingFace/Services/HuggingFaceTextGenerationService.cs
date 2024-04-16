@@ -21,6 +21,7 @@ public sealed class HuggingFaceTextGenerationService : ITextGenerationService
 {
     private Dictionary<string, object?> AttributesInternal { get; } = new();
     private HuggingFaceClient Client { get; }
+    public string ServiceName { get; set; }
 
     /// <inheritdoc />
     public IReadOnlyDictionary<string, object?> Attributes => this.AttributesInternal;

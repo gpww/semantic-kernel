@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.Encodings.Web;
@@ -13,7 +14,7 @@ namespace Microsoft.SemanticKernel.Plugins.Web;
 /// <summary>
 /// Web search engine plugin (e.g. Bing).
 /// </summary>
-public sealed class WebSearchEnginePlugin
+public class WebSearchEnginePlugin
 {
     /// <summary>
     /// The count parameter name.
@@ -52,12 +53,56 @@ public sealed class WebSearchEnginePlugin
     /// <param name="offset">The number of results to skip. Default is 0.</param>
     /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>A task that represents the asynchronous operation. The value of the TResult parameter contains the search results as a string.</returns>
-    /// <remarks>
-    /// This method is marked as "unsafe." The usage of JavaScriptEncoder.UnsafeRelaxedJsonEscaping may introduce security risks.
-    /// Only use this method if you are aware of the potential risks and have validated the input to prevent security vulnerabilities.
-    /// </remarks>
+    private async Task<IEnumerable<WebPage>> Search10WebPagesAsync(
+        string query, int count = 10, int offset = 0, CancellationToken cancellationToken = default)
+    {
+        var results = await this._connector.SearchWebPagesAsync(query, count, offset, cancellationToken).ConfigureAwait(false);
+        if (!results.Any())
+        {
+            return new List<WebPage>();
+            //throw new InvalidOperationException("Failed to get a response from the web search engine.");
+        }
+
+        return results;
+    }
+    /// <summary>
+    /// Performs a web search using the provided query, count, and offset.
+    /// 移除 URL 重复的项
+    /// </summary>
+    /// <param name="query">The text to search for.</param>
+    /// <param name="count">The number of results to return. Default is 1.</param>
+    /// <param name="offset">The number of results to skip. Default is 0.</param>
+    /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
+    /// <returns>A task that represents the asynchronous operation. The value of the TResult parameter contains the search results as a string.</returns>
+    public async Task<List<WebPage>> SearchWebPagesAsync(
+    string query, int count = 10, int offset = 0, CancellationToken cancellationToken = default)
+    {
+        var allResults = new List<WebPage>();
+        while (count > 0)
+        {
+            var batchSize = Math.Min(count, 10);
+            var results = await this.Search10WebPagesAsync(query, batchSize, offset, cancellationToken).ConfigureAwait(true);
+            allResults.AddRange(results);
+            count -= batchSize;
+            offset += batchSize;
+        }
+        allResults = allResults
+            .GroupBy(webPage => webPage.Url)
+            .Select(group => group.First())// 移除 URL 重复的项
+            .ToList();
+        return allResults;
+    }
+
+    /// <summary>
+    /// Performs a web search using the provided query, count, and offset.
+    /// </summary>
+    /// <param name="query">The text to search for.</param>
+    /// <param name="count">The number of results to return. Default is 1.</param>
+    /// <param name="offset">The number of results to skip. Default is 0.</param>
+    /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
+    /// <returns>A task that represents the asynchronous operation. The value of the TResult parameter contains the search results as a string.</returns>
     [KernelFunction, Description("Perform a web search.")]
-    public async Task<string> SearchAsync(
+    public virtual async Task<string> SearchAsync(
         [Description("Search query")] string query,
         [Description("Number of results")] int count = 10,
         [Description("Number of results to skip")] int offset = 0,
@@ -68,9 +113,9 @@ public sealed class WebSearchEnginePlugin
         {
             throw new InvalidOperationException("Failed to get a response from the web search engine.");
         }
-
         return count == 1
-            ? results[0] ?? string.Empty
-            : JsonSerializer.Serialize(results, s_jsonOptionsCache);
+        ? results.FirstOrDefault() ?? string.Empty
+        : string.Join("\n", results);
+        //: JsonSerializer.Serialize(results);
     }
 }

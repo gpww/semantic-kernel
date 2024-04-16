@@ -14,6 +14,7 @@ namespace Microsoft.SemanticKernel.Plugins.Core;
 /// </remark>
 public sealed class TimePlugin
 {
+    public const string PluginName = "TimePlugin";
     /// <summary>
     /// Get the current date
     /// </summary>

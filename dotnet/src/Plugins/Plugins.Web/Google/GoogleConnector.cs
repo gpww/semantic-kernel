@@ -6,12 +6,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Google.Apis.CustomSearchAPI.v1;
+using Google.Apis.Http;
 using Google.Apis.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Microsoft.SemanticKernel.Plugins.Web.Google;
-
 /// <summary>
 /// Google search connector.
 /// Provides methods to search using Google Custom Search API.
@@ -31,7 +31,8 @@ public sealed class GoogleConnector : IWebSearchEngineConnector, IDisposable
     public GoogleConnector(
         string apiKey,
         string searchEngineId,
-        ILoggerFactory? loggerFactory = null) : this(new BaseClientService.Initializer { ApiKey = apiKey }, searchEngineId, loggerFactory)
+        IHttpClientFactory httpClientFactory,
+        ILoggerFactory? loggerFactory = null) : this(new BaseClientService.Initializer { ApiKey = apiKey, HttpClientFactory = httpClientFactory }, searchEngineId, loggerFactory)
     {
         Verify.NotNullOrWhiteSpace(apiKey);
     }
@@ -56,7 +57,7 @@ public sealed class GoogleConnector : IWebSearchEngineConnector, IDisposable
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<string>> SearchAsync(
+    public async Task<IEnumerable<WebPage>> SearchWebPagesAsync(
         string query,
         int count,
         int offset,
@@ -80,7 +81,14 @@ public sealed class GoogleConnector : IWebSearchEngineConnector, IDisposable
 
         var results = await search.ExecuteAsync(cancellationToken).ConfigureAwait(false);
 
-        return results.Items.Select(item => item.Snippet);
+        return results.Items.Select(item => new WebPage { Name = item.Title, Url = item.Link, Snippet = item.Snippet });
+        // return results.Items.Select(item => item.Snippet);
+    }
+
+    public async Task<IEnumerable<string>> SearchAsync(string query, int count, int offset, CancellationToken cancellationToken)
+    {
+        var results = await this.SearchWebPagesAsync(query, count, offset, cancellationToken).ConfigureAwait(false);
+        return results.Select(item => item.Snippet);
     }
 
     /// <summary>

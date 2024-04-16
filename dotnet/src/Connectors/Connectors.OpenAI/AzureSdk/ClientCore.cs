@@ -157,7 +157,7 @@ internal abstract class ClientCore
 
         StreamingResponse<Completions>? response = await RunRequestAsync(() => this.Client.GetCompletionsStreamingAsync(options, cancellationToken)).ConfigureAwait(false);
 
-        await foreach (Completions completions in response)
+        await foreach (Completions completions in response.ConfigureAwait(false))
         {
             foreach (Choice choice in completions.Choices)
             {
@@ -180,7 +180,7 @@ internal abstract class ClientCore
 
     private static Dictionary<string, object?> GetChatChoiceMetadata(ChatCompletions completions, ChatChoice chatChoice)
     {
-        return new Dictionary<string, object?>(6)
+        return new Dictionary<string, object?>(7)
         {
             { nameof(completions.Id), completions.Id },
             { nameof(completions.Created), completions.Created },
@@ -188,6 +188,7 @@ internal abstract class ClientCore
             { nameof(completions.SystemFingerprint), completions.SystemFingerprint },
             { nameof(completions.Usage), completions.Usage },
             { nameof(chatChoice.ContentFilterResults), chatChoice.ContentFilterResults },
+            { nameof(chatChoice.LogProbabilityInfo), chatChoice.LogProbabilityInfo },
         };
     }
 
@@ -485,6 +486,8 @@ internal abstract class ClientCore
         ValidateAutoInvoke(autoInvoke, chatExecutionSettings.ResultsPerPrompt);
 
         var chatOptions = CreateChatCompletionsOptions(chatExecutionSettings, chat, kernel, this.DeploymentOrModelName);
+        executionSettings?.AddOrUpdateExtensionData(KernelArguments.ChatHistoryJson, chatOptions.GetMessagesJson());
+        executionSettings?.AddOrUpdateExtensionData(KernelArguments.ToolsJson, chatOptions.GetToolsJson());//这个时候增加了 functions
 
         StringBuilder? contentBuilder = null;
         Dictionary<int, string>? toolCallIdsByIndex = null;
@@ -601,6 +604,7 @@ internal abstract class ClientCore
                 object? functionResult;
                 try
                 {
+                    functionArgs.AddExtensionData(executionSettings);
                     // Note that we explicitly do not use executionSettings here; those pertain to the all-up operation and not necessarily to any
                     // further calls made as part of this function invocation. In particular, we must not use function calling settings naively here,
                     // as the called function could in turn telling the model about itself as a possible candidate for invocation.
@@ -706,7 +710,7 @@ internal abstract class ClientCore
         OpenAIPromptExecutionSettings chatSettings = OpenAIPromptExecutionSettings.FromExecutionSettings(executionSettings);
         ChatHistory chat = CreateNewChat(prompt, chatSettings);
 
-        await foreach (var chatUpdate in this.GetStreamingChatMessageContentsAsync(chat, executionSettings, kernel, cancellationToken))
+        await foreach (var chatUpdate in this.GetStreamingChatMessageContentsAsync(chat, executionSettings, kernel, cancellationToken).ConfigureAwait(false))
         {
             yield return new StreamingTextContent(chatUpdate.Content, chatUpdate.ChoiceIndex, chatUpdate.ModelId, chatUpdate, Encoding.UTF8, chatUpdate.Metadata);
         }
@@ -844,7 +848,9 @@ internal abstract class ClientCore
             ChoiceCount = executionSettings.ResultsPerPrompt,
             DeploymentName = deploymentOrModelName,
             Seed = executionSettings.Seed,
-            User = executionSettings.User
+            User = executionSettings.User,
+            EnableLogProbabilities = executionSettings.EnableLogProbabilities,
+            LogProbabilitiesPerToken = executionSettings.LogProbabilitiesPerToken
         };
 
         switch (executionSettings.ResponseFormat)
@@ -946,7 +952,7 @@ internal abstract class ClientCore
         throw new NotImplementedException($"Role {chatRole} is not implemented");
     }
 
-    private static ChatRequestMessage GetRequestMessage(ChatMessageContent message)
+    internal static ChatRequestMessage GetRequestMessage(ChatMessageContent message)
     {
         if (message.Role == AuthorRole.System)
         {

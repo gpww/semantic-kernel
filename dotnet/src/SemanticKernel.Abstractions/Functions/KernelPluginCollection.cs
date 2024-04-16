@@ -24,6 +24,8 @@ public sealed class KernelPluginCollection : ICollection<KernelPlugin>, IReadOnl
     /// <summary>The underlying dictionary of plugins.</summary>
     private readonly Dictionary<string, KernelPlugin> _plugins;
 
+    public bool Contains(string pluginName) => this._plugins.ContainsKey(pluginName);
+
     /// <summary>Initializes a collection of plugins.</summary>
     public KernelPluginCollection() => this._plugins = new(StringComparer.OrdinalIgnoreCase);
 

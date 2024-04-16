@@ -23,6 +23,7 @@ public sealed class HuggingFaceTextEmbeddingGenerationService : ITextEmbeddingGe
 
     /// <inheritdoc />
     public IReadOnlyDictionary<string, object?> Attributes => this.AttributesInternal;
+    public string ServiceName { get; set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="HuggingFaceTextEmbeddingGenerationService"/> class.

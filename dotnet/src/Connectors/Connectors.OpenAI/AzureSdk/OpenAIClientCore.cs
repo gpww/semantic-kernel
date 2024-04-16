@@ -1,7 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
+using System;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using Azure.AI.OpenAI;
 using Azure.Core;
 using Microsoft.Extensions.Logging;
@@ -12,17 +14,12 @@ namespace Microsoft.SemanticKernel.Connectors.OpenAI;
 /// <summary>
 /// Core implementation for OpenAI clients, providing common functionality and properties.
 /// </summary>
-internal sealed class OpenAIClientCore : ClientCore
+internal partial class OpenAIClientCore : ClientCore
 {
     /// <summary>
     /// Gets the attribute name used to store the organization in the <see cref="IAIService.Attributes"/> dictionary.
     /// </summary>
     public static string OrganizationKey => "Organization";
-
-    /// <summary>
-    /// OpenAI / Azure OpenAI Client
-    /// </summary>
-    internal override OpenAIClient Client { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OpenAIClientCore"/> class.
@@ -37,22 +34,13 @@ internal sealed class OpenAIClientCore : ClientCore
         string apiKey,
         string? organization = null,
         HttpClient? httpClient = null,
-        ILogger? logger = null) : base(logger)
+        ILogger? logger = null) : this(modelId, apiKey, null, organization, httpClient, logger)
     {
-        Verify.NotNullOrWhiteSpace(modelId);
-        Verify.NotNullOrWhiteSpace(apiKey);
-
-        this.DeploymentOrModelName = modelId;
-
-        var options = GetOpenAIClientOptions(httpClient);
-
-        if (!string.IsNullOrWhiteSpace(organization))
-        {
-            options.AddPolicy(new AddHeaderRequestPolicy("OpenAI-Organization", organization!), HttpPipelinePosition.PerCall);
-        }
-
-        this.Client = new OpenAIClient(apiKey, options);
     }
+    /// <summary>
+    /// OpenAI / Azure OpenAI Client
+    /// </summary>
+    internal override OpenAIClient Client { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OpenAIClientCore"/> class using the specified OpenAIClient.

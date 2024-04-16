@@ -20,6 +20,7 @@ public sealed class OpenAIAudioToTextService : IAudioToTextService
 {
     /// <summary>Core implementation shared by OpenAI services.</summary>
     private readonly OpenAIClientCore _core;
+    public string ServiceName { get; set; }
 
     /// <inheritdoc/>
     public IReadOnlyDictionary<string, object?> Attributes => this._core.Attributes;

@@ -52,7 +52,7 @@ public sealed class BingConnector : IWebSearchEngineConnector
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<string>> SearchAsync(string query, int count = 1, int offset = 0, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<WebPage>> SearchWebPagesAsync(string query, int count = 1, int offset = 0, CancellationToken cancellationToken = default)
     {
         if (count is <= 0 or >= 50)
         {
@@ -81,9 +81,15 @@ public sealed class BingConnector : IWebSearchEngineConnector
 
         WebPage[]? results = data?.WebPages?.Value;
 
-        return results == null ? Enumerable.Empty<string>() : results.Select(x => x.Snippet);
+        return results;
+        //return results == null ? Enumerable.Empty<string>() : results.Select(x => x.Snippet);
     }
 
+    public async Task<IEnumerable<string>> SearchAsync(string query, int count, int offset, CancellationToken cancellationToken)
+    {
+        var results = await this.SearchWebPagesAsync(query, count, offset, cancellationToken).ConfigureAwait(false);
+        return results.Select(item => item.Snippet);
+    }
     /// <summary>
     /// Sends a GET request to the specified URI.
     /// </summary>
@@ -116,19 +122,5 @@ public sealed class BingConnector : IWebSearchEngineConnector
     {
         [JsonPropertyName("value")]
         public WebPage[]? Value { get; set; }
-    }
-
-    [SuppressMessage("Performance", "CA1812:Internal class that is apparently never instantiated",
-        Justification = "Class is instantiated through deserialization.")]
-    private sealed class WebPage
-    {
-        [JsonPropertyName("name")]
-        public string Name { get; set; } = string.Empty;
-
-        [JsonPropertyName("url")]
-        public string Url { get; set; } = string.Empty;
-
-        [JsonPropertyName("snippet")]
-        public string Snippet { get; set; } = string.Empty;
     }
 }

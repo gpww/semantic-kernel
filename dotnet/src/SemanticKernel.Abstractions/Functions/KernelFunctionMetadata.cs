@@ -43,6 +43,7 @@ public sealed class KernelFunctionMetadata
         this.Description = metadata.Description;
         this.Parameters = metadata.Parameters;
         this.ReturnParameter = metadata.ReturnParameter;
+        this.FunctionCallAvailable = metadata.FunctionCallAvailable;
     }
 
     /// <summary>Gets the name of the function.</summary>
@@ -67,6 +68,11 @@ public sealed class KernelFunctionMetadata
         get => this._description;
         init => this._description = value ?? string.Empty;
     }
+
+    /// <summary>
+    /// 是否发送到服务器端作为 FunctionCall候选
+    /// </summary>
+    public bool FunctionCallAvailable { get; set; } = false;
 
     /// <summary>Gets the metadata for the parameters to the function.</summary>
     /// <remarks>If the function has no parameters, the returned list will be empty.</remarks>

@@ -20,6 +20,7 @@ public sealed class AzureOpenAIChatCompletionService : IChatCompletionService, I
 {
     /// <summary>Core implementation shared by Azure OpenAI clients.</summary>
     private readonly AzureOpenAIClientCore _core;
+    public string ServiceName { get; set; }
 
     /// <summary>
     /// Create an instance of the <see cref="AzureOpenAIChatCompletionService"/> connector with API key auth.

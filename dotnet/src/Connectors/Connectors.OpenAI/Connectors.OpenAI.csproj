@@ -21,14 +21,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ChatCompletion\OpenAIChatCompletionService2.cs" />
+    <Compile Remove="CustomClient\OpenAIClientEx.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <InternalsVisibleTo Include="SemanticKernel.Connectors.UnitTests" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\..\..\..\Code\CSharp\azure-sdk-for-net\sdk\openai\Azure.AI.OpenAI\src\Azure.AI.OpenAI.csproj" />
     <ProjectReference Include="..\..\SemanticKernel.Core\SemanticKernel.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Azure.AI.OpenAI" />
   </ItemGroup>
 </Project>

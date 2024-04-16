@@ -13,4 +13,6 @@ public interface IAIService
     /// Gets the AI service attributes.
     /// </summary>
     IReadOnlyDictionary<string, object?> Attributes { get; }
+
+    string ServiceName { get; set; }
 }

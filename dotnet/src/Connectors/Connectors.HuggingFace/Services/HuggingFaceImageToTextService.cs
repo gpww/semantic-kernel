@@ -20,6 +20,7 @@ public sealed class HuggingFaceImageToTextService : IImageToTextService
 {
     private readonly Dictionary<string, object?> _attributesInternal = new();
     private readonly HuggingFaceClient _client;
+    public string ServiceName { get; set; }
 
     /// <inheritdoc />
     public IReadOnlyDictionary<string, object?> Attributes => this._attributesInternal;
