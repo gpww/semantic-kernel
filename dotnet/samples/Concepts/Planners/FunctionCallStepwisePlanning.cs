@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.Planning;
 using Microsoft.SemanticKernel.Plugins.Core;
 
@@ -27,6 +28,21 @@ public class FunctionCallStepwisePlanning(ITestOutputHelper output) : BaseTest(o
         };
         var planner = new Microsoft.SemanticKernel.Planning.FunctionCallingStepwisePlanner(options);
 
+        //To achieve the goal of finding the current hour number and adding 5 to it, we can follow these steps:
+
+        //1.Use the `TimePlugin_HourNumber` function to get the current hour number.
+        //2.Use the `MathPlugin_Add` function to add 5 to the current hour number obtained from step 1.
+
+        //Let's execute these steps:
+
+        //Step 1: Use `TimePlugin_HourNumber` to get the current hour number.
+
+        //Step 2: Use `MathPlugin_Add` with the current hour number as the "value" and 5 as the "amount" to add.
+
+        //After performing these steps, we will have the current hour number plus 5.However, since I cannot execute functions, I will describe the final step to communicate the result back to the user:
+
+        //Step 3: Use the `UserInteraction_SendFinalAnswer` function to send the final answer back to the user. The final answer will be the result obtained from step 2.
+
         foreach (var question in questions)
         {
             FunctionCallingStepwisePlannerResult result = await planner.ExecuteAsync(kernel, question);
@@ -43,11 +59,14 @@ public class FunctionCallStepwisePlanning(ITestOutputHelper output) : BaseTest(o
     /// <returns>A kernel instance</returns>
     private static Kernel InitializeKernel()
     {
-        Kernel kernel = Kernel.CreateBuilder()
-            .AddOpenAIChatCompletion(
-                apiKey: TestConfiguration.OpenAI.ApiKey,
-                modelId: "gpt-3.5-turbo-1106")
-            .Build();
+        var builder = Kernel.CreateBuilder();
+        builder.AddOneAPITextGeneration("gpt-4-1106-preview", "sk-GJlwir4bB0UYkb02Fa71F161120c45569641FbE59cEd7b78", "https://api.ezchat.top/v1/");
+        var kernel = builder.Build();
+        //.AddAzureOpenAIChatCompletion(
+        //    deploymentName: TestConfiguration.AzureOpenAI.ChatDeploymentName,
+        //    endpoint: TestConfiguration.AzureOpenAI.Endpoint,
+        //    apiKey: TestConfiguration.AzureOpenAI.ApiKey,
+        //    modelId: TestConfiguration.AzureOpenAI.ChatModelId)
 
         kernel.ImportPluginFromType<Plugins.EmailPlugin>();
         kernel.ImportPluginFromType<MathPlugin>();

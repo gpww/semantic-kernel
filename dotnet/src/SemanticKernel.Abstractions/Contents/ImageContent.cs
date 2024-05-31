@@ -15,6 +15,7 @@ public sealed class ImageContent : KernelContent
     /// The URI of image.
     /// </summary>
     public Uri? Uri { get; set; }
+    private readonly string _absoluteUri;
 
     /// <summary>
     /// The image data.
@@ -29,6 +30,13 @@ public sealed class ImageContent : KernelContent
     public ImageContent()
     {
     }
+
+    public ImageContent(string absoluteUri, ReadOnlyMemory<byte> data) : this(data, innerContent: absoluteUri)
+    {
+        this._absoluteUri = absoluteUri;
+    }
+    public int Width { get; set; }
+    public int Height { get; set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ImageContent"/> class.
@@ -45,6 +53,7 @@ public sealed class ImageContent : KernelContent
         : base(innerContent, modelId, metadata)
     {
         this.Uri = uri;
+        this._absoluteUri = uri.AbsoluteUri;
     }
 
     /// <summary>
@@ -79,8 +88,9 @@ public sealed class ImageContent : KernelContent
     /// </remarks>
     public override string ToString()
     {
-        return this.BuildDataUri() ?? this.Uri?.ToString() ?? string.Empty;
+        return this._absoluteUri ?? this.Uri?.ToString() ?? this.BuildDataUri() ?? string.Empty;
     }
+    //正在 Microsoft.SemanticKernel.Connectors.OpenAI.ClientCore 第 978 行调用
 
     private string? BuildDataUri()
     {

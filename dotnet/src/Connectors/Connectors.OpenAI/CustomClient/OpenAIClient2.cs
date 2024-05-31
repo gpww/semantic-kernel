@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
 using System;
+using System.Text.RegularExpressions;
 using Azure.AI.OpenAI;
 
 namespace Microsoft.SemanticKernel.Connectors.OpenAI.CustomClient;
@@ -23,7 +24,7 @@ public class OpenAIClient2 : OpenAIClient
             endPoint = endPoint.TrimEnd('/');
         }
 
-        if (!endPoint.EndsWith("/v1"))
+        if (!Regex.IsMatch(endPoint, @"/v\d+$"))
         {
             endPoint += "/v1";
         }

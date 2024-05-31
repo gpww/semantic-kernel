@@ -52,8 +52,8 @@ public class TextMemoryPlugin_MultipleMemoryStore(ITestOutputHelper output) : Ba
         // Azure AI Search Memory Store - a store that persists data in a hosted Azure AI Search database
         // store = CreateSampleAzureAISearchMemoryStore();
 
-        // Qdrant Memory Store - a store that persists data in a local or remote Qdrant database
-        // store = CreateSampleQdrantMemoryStore();
+        //Qdrant Memory Store - a store that persists data in a local or remote Qdrant database
+        store = CreateSampleQdrantMemoryStore();
 
         // Chroma Memory Store
         // store = CreateSampleChromaMemoryStore();

@@ -5,6 +5,7 @@
     <RootNamespace>Microsoft.SemanticKernel</RootNamespace>
     <TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
     <NoWarn>$(NoWarn);SKEXP0001</NoWarn>
+    <ApiCompatGenerateSuppressionFile>true</ApiCompatGenerateSuppressionFile>
     <EnablePackageValidation>true</EnablePackageValidation>
   </PropertyGroup>
 
@@ -16,6 +17,8 @@
     <Title>Semantic Kernel - Abstractions</Title>
     <Description>Semantic Kernel interfaces and abstractions. This package is automatically installed by Semantic Kernel packages if needed.</Description>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'" />
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />

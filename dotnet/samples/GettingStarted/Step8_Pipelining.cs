@@ -98,7 +98,7 @@ public static class KernelFunctionCombinators
     /// <param name="functions">The pipeline of functions to invoke.</param>
     /// <param name="functionName">The name of the combined operation.</param>
     /// <param name="description">The description of the combined operation.</param>
-    /// <returns>The result of the final function.</returns>
+    /// <returns>The result of the final function.</returns> vu
     /// <remarks>
     /// The result from one function will be fed into the first argument of the next function.
     /// </remarks>

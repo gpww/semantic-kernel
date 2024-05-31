@@ -110,7 +110,7 @@ public sealed class OpenAIChatCompletionService : IChatCompletionService, ITextG
             openAIClient,
             loggerFactory?.CreateLogger(typeof(OpenAIChatCompletionService)));
 
-        this._core.AddAttribute(AIServiceExtensions.ModelIdKey, modelId);
+        this._core.AddAttribute(AIServiceExtensions.ModelIdKey, modelId);//添加模型ID
     }
 
     /// <inheritdoc/>

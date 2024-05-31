@@ -92,6 +92,8 @@ providing personalized recommendations, entertainment, and assistance. AI is awe
 
         public IReadOnlyDictionary<string, object?> Attributes => new Dictionary<string, object?>();
 
+        public string ServiceName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public async IAsyncEnumerable<StreamingTextContent> GetStreamingTextContentsAsync(string prompt, PromptExecutionSettings? executionSettings = null, Kernel? kernel = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             foreach (string word in LLMResultText.Split(' ', StringSplitOptions.RemoveEmptyEntries))

@@ -14,9 +14,20 @@ public partial class ChatHistory
         throw new NotImplementedException();
     }
 
-    public virtual ChatMessageContent? SystemMessage => this.Count > 0 ? this[0] : null;
+    public virtual ChatMessageContent? SystemMessage
+    {
+        get
+        {
+            if (this._messages?.Count == 0)
+            {
+                return null;
+            }
 
-    public virtual void SetSystemMessage(string content)
+            return this._messages.First(m => m.Role == AuthorRole.System);
+        }
+    }
+
+    public virtual void UpdateSystemMessage(string content)
     {
         throw new NotImplementedException();
     }

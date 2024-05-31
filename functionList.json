@@ -1,0 +1,444 @@
+[
+  {
+    "name": "EmailPlugin_GetEmailAddress",
+    "description": "Given a name, find email address",
+    "parameters": {
+      "type": "object",
+      "required": ["input"],
+      "properties": {
+        "input": {
+          "type": "string",
+          "description": "The name of the person whose email address needs to be found."
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "EmailPlugin_SendEmail",
+    "description": "Given an e-mail and message body, send an email",
+    "parameters": {
+      "type": "object",
+      "required": ["input", "email_address"],
+      "properties": {
+        "input": {
+          "type": "string",
+          "description": "The body of the email message to send."
+        },
+        "email_address": {
+          "type": "string",
+          "description": "The email address to send email to."
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "MathPlugin_Abs",
+    "description": "Take the absolute value of a number",
+    "parameters": {
+      "type": "object",
+      "required": ["number1"],
+      "properties": {
+        "number1": {
+          "type": "number",
+          "description": "The number to take the absolute value of"
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "MathPlugin_Acos",
+    "description": "Take the arccosine of a number",
+    "parameters": {
+      "type": "object",
+      "required": ["number1"],
+      "properties": {
+        "number1": {
+          "type": "number",
+          "description": "The number to take the arccosine of"
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "MathPlugin_Add",
+    "description": "Adds an amount to a value",
+    "parameters": {
+      "type": "object",
+      "required": ["value", "amount"],
+      "properties": {
+        "value": { "type": "integer", "description": "The value to add" },
+        "amount": { "type": "integer", "description": "Amount to add" }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "MathPlugin_Asin",
+    "description": "Take the arcsine of a number",
+    "parameters": {
+      "type": "object",
+      "required": ["number1"],
+      "properties": {
+        "number1": {
+          "type": "number",
+          "description": "The number to take the arcsine of"
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "MathPlugin_Atan",
+    "description": "Take the arctangent of a number",
+    "parameters": {
+      "type": "object",
+      "required": ["number1"],
+      "properties": {
+        "number1": {
+          "type": "number",
+          "description": "The number to take the arctangent of"
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "MathPlugin_Ceiling",
+    "description": "Take the ceiling of a number",
+    "parameters": {
+      "type": "object",
+      "required": ["number1"],
+      "properties": {
+        "number1": {
+          "type": "number",
+          "description": "The number to take the ceiling of"
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "MathPlugin_Cos",
+    "description": "Take the cosine of a number",
+    "parameters": {
+      "type": "object",
+      "required": ["number1"],
+      "properties": {
+        "number1": {
+          "type": "number",
+          "description": "The number to take the cosine of"
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "MathPlugin_Divide",
+    "description": "Divide two numbers",
+    "parameters": {
+      "type": "object",
+      "required": ["number1", "number2"],
+      "properties": {
+        "number1": {
+          "type": "number",
+          "description": "The first number to divide from"
+        },
+        "number2": {
+          "type": "number",
+          "description": "The second number to divide by"
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "MathPlugin_Floor",
+    "description": "Take the floor of a number",
+    "parameters": {
+      "type": "object",
+      "required": ["number1"],
+      "properties": {
+        "number1": {
+          "type": "number",
+          "description": "The number to take the floor of"
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "MathPlugin_Log",
+    "description": "Take the log of a number",
+    "parameters": {
+      "type": "object",
+      "required": ["number1", "number2"],
+      "properties": {
+        "number1": {
+          "type": "number",
+          "description": "The number to take the log of"
+        },
+        "number2": { "type": "number", "description": "The base of the log" }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "MathPlugin_Multiply",
+    "description": "Multiply two numbers. When increasing by a percentage, don\u0027t forget to add 1 to the percentage.",
+    "parameters": {
+      "type": "object",
+      "required": ["number1", "number2"],
+      "properties": {
+        "number1": {
+          "type": "number",
+          "description": "The first number to multiply"
+        },
+        "number2": {
+          "type": "number",
+          "description": "The second number to multiply"
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "MathPlugin_Power",
+    "description": "Raise a number to a power",
+    "parameters": {
+      "type": "object",
+      "required": ["number1", "number2"],
+      "properties": {
+        "number1": { "type": "number", "description": "The number to raise" },
+        "number2": {
+          "type": "number",
+          "description": "The power to raise the number to"
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "MathPlugin_Round",
+    "description": "Round a number to the target number of decimal places",
+    "parameters": {
+      "type": "object",
+      "required": ["number1", "number2"],
+      "properties": {
+        "number1": { "type": "number", "description": "The number to round" },
+        "number2": {
+          "type": "number",
+          "description": "The number of decimal places to round to"
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "MathPlugin_Sin",
+    "description": "Take the sine of a number",
+    "parameters": {
+      "type": "object",
+      "required": ["number1"],
+      "properties": {
+        "number1": {
+          "type": "number",
+          "description": "The number to take the sine of"
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "MathPlugin_Sqrt",
+    "description": "Take the square root of a number",
+    "parameters": {
+      "type": "object",
+      "required": ["number1"],
+      "properties": {
+        "number1": {
+          "type": "number",
+          "description": "The number to take a square root of"
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "MathPlugin_Subtract",
+    "description": "Subtracts an amount from a value",
+    "parameters": {
+      "type": "object",
+      "required": ["value", "amount"],
+      "properties": {
+        "value": { "type": "integer", "description": "The value to subtract" },
+        "amount": { "type": "integer", "description": "Amount to subtract" }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "MathPlugin_Tan",
+    "description": "Take the tangent of a number",
+    "parameters": {
+      "type": "object",
+      "required": ["number1"],
+      "properties": {
+        "number1": {
+          "type": "number",
+          "description": "The number to take the tangent of"
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_Date",
+    "description": "Get the current date",
+    "parameters": { "type": "object", "required": [], "properties": {} },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_DateMatchingLastDayName",
+    "description": "Get the date of the last day matching the supplied week day name in English. Example: Che giorno era \u0027Martedi\u0027 scorso -\u003E dateMatchingLastDayName \u0027Tuesday\u0027 =\u003E Tuesday, 16 May, 2023",
+    "parameters": {
+      "type": "object",
+      "required": ["input"],
+      "properties": {
+        "input": {
+          "enum": [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday"
+          ],
+          "description": "The day name to match"
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_Day",
+    "description": "Get the current day of the month",
+    "parameters": { "type": "object", "required": [], "properties": {} },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_DayOfWeek",
+    "description": "Get the current day of the week",
+    "parameters": { "type": "object", "required": [], "properties": {} },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_DaysAgo",
+    "description": "Get the date offset by a provided number of days from today",
+    "parameters": {
+      "type": "object",
+      "required": ["input"],
+      "properties": {
+        "input": {
+          "type": "number",
+          "description": "The number of days to offset from today"
+        }
+      }
+    },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_Hour",
+    "description": "Get the current clock hour",
+    "parameters": { "type": "object", "required": [], "properties": {} },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_HourNumber",
+    "description": "Get the current clock 24-hour number",
+    "parameters": { "type": "object", "required": [], "properties": {} },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_Minute",
+    "description": "Get the minutes on the current hour",
+    "parameters": { "type": "object", "required": [], "properties": {} },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_Month",
+    "description": "Get the current month name",
+    "parameters": { "type": "object", "required": [], "properties": {} },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_MonthNumber",
+    "description": "Get the current month number",
+    "parameters": { "type": "object", "required": [], "properties": {} },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_Now",
+    "description": "Get the current date and time in the local time zone",
+    "parameters": { "type": "object", "required": [], "properties": {} },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_Second",
+    "description": "Get the seconds on the current minute",
+    "parameters": { "type": "object", "required": [], "properties": {} },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_Time",
+    "description": "Get the current time",
+    "parameters": { "type": "object", "required": [], "properties": {} },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_TimeZoneName",
+    "description": "Get the local time zone name",
+    "parameters": { "type": "object", "required": [], "properties": {} },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_TimeZoneOffset",
+    "description": "Get the local time zone offset from UTC",
+    "parameters": { "type": "object", "required": [], "properties": {} },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_Today",
+    "description": "Get the current date",
+    "parameters": { "type": "object", "required": [], "properties": {} },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_UtcNow",
+    "description": "Get the current UTC date and time",
+    "parameters": { "type": "object", "required": [], "properties": {} },
+    "responses": {}
+  },
+  {
+    "name": "TimePlugin_Year",
+    "description": "Get the current year",
+    "parameters": { "type": "object", "required": [], "properties": {} },
+    "responses": {}
+  },
+  {
+    "name": "UserInteraction_SendFinalAnswer",
+    "description": "This function is used to send the final answer of a plan to the user.",
+    "parameters": {
+      "type": "object",
+      "required": ["answer"],
+      "properties": {
+        "answer": { "type": "string", "description": "The final answer" }
+      }
+    },
+    "responses": {}
+  }
+]

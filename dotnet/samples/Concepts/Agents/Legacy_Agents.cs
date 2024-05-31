@@ -117,7 +117,6 @@ public class Legacy_Agents(ITestOutputHelper output) : BaseTest(output)
                 .WithOpenAIChatCompletion(OpenAIFunctionEnabledModel, TestConfiguration.OpenAI.ApiKey)
                 .FromTemplate(EmbeddedResource.Read("Agents.ParrotAgent.yaml"))
                 .BuildAsync();
-
         try
         {
             // Invoke agent plugin.

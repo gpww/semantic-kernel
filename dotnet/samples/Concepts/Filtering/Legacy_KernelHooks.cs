@@ -36,7 +36,7 @@ public class Legacy_KernelHooks : BaseTest
             executionSettings: new OpenAIPromptExecutionSettings() { MaxTokens = 100, Temperature = 0.4, TopP = 1 });
 
         // Define hooks
-        void MyPreHandler(object? sender, FunctionInvokingEventArgs e)
+        void FunctionInvokingHandler(object? sender, FunctionInvokingEventArgs e)
         {
             Console.WriteLine($"{e.Function.Name} : Pre Execution Handler - Triggered");
         }
@@ -47,13 +47,13 @@ public class Legacy_KernelHooks : BaseTest
             e.Cancel = true;
         }
 
-        void MyPostExecutionHandler(object? sender, FunctionInvokedEventArgs e)
+        void FunctionInvokedHandler(object? sender, FunctionInvokedEventArgs e)
         {
             Console.WriteLine($"{e.Function.Name} : Post Execution Handler - Usage: {e.Result.Metadata?["Usage"]?.AsJson()}");
         }
 
-        kernel.FunctionInvoking += MyPreHandler;
-        kernel.FunctionInvoked += MyPostExecutionHandler;
+        kernel.FunctionInvoking += FunctionInvokingHandler;
+        kernel.FunctionInvoked += FunctionInvokedHandler;
 
         // Demonstrate pattern for removing a handler.
         // Note: MyRemovedPreExecutionHandler will cancel execution if not removed.
@@ -92,13 +92,13 @@ public class Legacy_KernelHooks : BaseTest
             executionSettings: new OpenAIPromptExecutionSettings() { MaxTokens = 100, Temperature = 0.4, TopP = 1 });
 
         // Define hooks
-        void MyRenderingHandler(object? sender, PromptRenderingEventArgs e)
+        void PromptRenderingHandler(object? sender, PromptRenderingEventArgs e)
         {
             Console.WriteLine($"{e.Function.Name} : Prompt Rendering Handler - Triggered");
             e.Arguments["style"] = "Seinfeld";
         }
 
-        void MyRenderedHandler(object? sender, PromptRenderedEventArgs e)
+        void PromptRenderedHandler(object? sender, PromptRenderedEventArgs e)
         {
             Console.WriteLine($"{e.Function.Name} : Prompt Rendered Handler - Triggered");
             e.RenderedPrompt += " USE SHORT, CLEAR, COMPLETE SENTENCES.";
@@ -106,8 +106,8 @@ public class Legacy_KernelHooks : BaseTest
             Console.WriteLine(e.RenderedPrompt);
         }
 
-        kernel.PromptRendering += MyRenderingHandler;
-        kernel.PromptRendered += MyRenderedHandler;
+        kernel.PromptRendering += PromptRenderingHandler;
+        kernel.PromptRendered += PromptRenderedHandler;
 
         // Invoke prompt to trigger prompt rendering hooks.
         const string Input = "I missed the F1 final race";

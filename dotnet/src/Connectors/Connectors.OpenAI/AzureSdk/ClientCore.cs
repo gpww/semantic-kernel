@@ -641,7 +641,7 @@ internal abstract class ClientCore
         bool autoInvoke = kernel is not null && chatExecutionSettings.ToolCallBehavior?.MaximumAutoInvokeAttempts > 0 && s_inflightAutoInvokes.Value < MaxInflightAutoInvokes;
         ValidateAutoInvoke(autoInvoke, chatExecutionSettings.ResultsPerPrompt);
 
-        var chatOptions = CreateChatCompletionsOptions(chatExecutionSettings, chat, kernel, this.DeploymentOrModelName);
+        var chatOptions = this.CreateChatCompletionsOptions(chatExecutionSettings, chat, kernel, this.DeploymentOrModelName);
         executionSettings?.AddOrUpdateExtensionData(KernelArguments.ChatHistoryJson, chatOptions.GetMessagesJson());
         executionSettings?.AddOrUpdateExtensionData(KernelArguments.ToolsJson, chatOptions.GetToolsJson());//这个时候增加了 functions
 
@@ -1161,10 +1161,10 @@ internal abstract class ClientCore
             }
         }
 
-        if (!string.IsNullOrWhiteSpace(executionSettings.ChatSystemPrompt) && !chatHistory.Any(m => m.Role == AuthorRole.System))
-        {
-            options.Messages.AddRange(GetRequestMessages(new ChatMessageContent(AuthorRole.System, executionSettings!.ChatSystemPrompt), executionSettings.ToolCallBehavior));
-        }
+        //if (!string.IsNullOrWhiteSpace(executionSettings?.ChatSystemPrompt) && !chatHistory.Any(m => m.Role == AuthorRole.System))
+        //{
+        //    options.Messages.Add(GetRequestMessage(new ChatMessageContent(AuthorRole.System, executionSettings!.ChatSystemPrompt)));
+        //}
 
         foreach (var message in chatHistory)
         {
@@ -1174,7 +1174,7 @@ internal abstract class ClientCore
         return options;
     }
 
-    private static ChatRequestMessage GetRequestMessage(ChatRole chatRole, string contents, string? name, ChatCompletionsFunctionToolCall[]? tools)
+    public static ChatRequestMessage GetRequestMessage(ChatRole chatRole, string contents, string? name, ChatCompletionsFunctionToolCall[]? tools)
     {
         if (chatRole == ChatRole.User)
         {
@@ -1260,7 +1260,7 @@ internal abstract class ClientCore
             return [new ChatRequestUserMessage(message.Items.Select(static (KernelContent item) => (ChatMessageContentItem)(item switch
             {
                 TextContent textContent => new ChatMessageTextContentItem(textContent.Text),
-                ImageContent imageContent => new ChatMessageImageContentItem(imageContent.Uri),
+                ImageContent imageContent => new ChatMessageImageContentItem(imageContent.ToString()),
                 _ => throw new NotSupportedException($"Unsupported chat message content type '{item.GetType()}'.")
             })))
             { Name = message.AuthorName }];

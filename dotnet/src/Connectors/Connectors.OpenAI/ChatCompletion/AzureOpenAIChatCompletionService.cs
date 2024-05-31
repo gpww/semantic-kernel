@@ -79,7 +79,7 @@ public sealed class AzureOpenAIChatCompletionService : IChatCompletionService, I
         ILoggerFactory? loggerFactory = null)
     {
         this._core = new(deploymentName, openAIClient, loggerFactory?.CreateLogger(typeof(AzureOpenAIChatCompletionService)));
-        this._core.AddAttribute(AIServiceExtensions.ModelIdKey, modelId);
+        this._core.AddAttribute(AIServiceExtensions.ModelIdKey, modelId);//添加模型ID
     }
 
     /// <inheritdoc/>

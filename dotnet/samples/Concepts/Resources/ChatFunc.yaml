@@ -1,0 +1,15 @@
+name: ChatFunc
+description: 
+template: |
+    {{#each chatHistory}}
+        <message role=""{{role}}"">{{content}}</message>
+    {{/each}}
+template_format: handlebars
+input_variables:
+  - name:          chatHistory
+    description:  The chat history
+    default:
+execution_settings:
+  default:
+    max_tokens:   10
+    temperature:  0

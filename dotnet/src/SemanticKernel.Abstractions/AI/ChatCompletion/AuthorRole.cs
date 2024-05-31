@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
@@ -39,6 +40,8 @@ public readonly struct AuthorRole : IEquatable<AuthorRole>
     /// </remarks>
     public string Label { get; }
 
+    private readonly HashSet<string> _predefinedRoles = new() { "system", "assistant", "user", "tool" };
+
     /// <summary>
     /// Creates a new AuthorRole instance with the provided label.
     /// </summary>
@@ -47,6 +50,17 @@ public readonly struct AuthorRole : IEquatable<AuthorRole>
     public AuthorRole(string label)
     {
         Verify.NotNullOrWhiteSpace(label, nameof(label));
+        if (!this._predefinedRoles.Contains(label.ToLower()))
+        {
+            if (label == "function")
+            {
+                label = "tool";
+            }
+            else
+            {
+                label = "user";
+            }
+        }
         this.Label = label!;
     }
 

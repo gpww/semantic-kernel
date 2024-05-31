@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 #pragma warning disable CA1033 // Interface methods should be callable by child types
@@ -57,8 +58,12 @@ public partial class ChatHistory : IList<ChatMessageContent>, IReadOnlyList<Chat
     /// <param name="encoding">Encoding of the message content</param>
     /// <param name="metadata">Dictionary for any additional metadata</param>
     /// </summary>
-    public void AddMessage(AuthorRole authorRole, string content, Encoding? encoding = null, IReadOnlyDictionary<string, object?>? metadata = null) =>
-        this.Add(new ChatMessageContent(authorRole, content, null, null, encoding, metadata));
+    public ChatMessageContent AddMessage(AuthorRole authorRole, string content, Encoding? encoding = null, IReadOnlyDictionary<string, object?>? metadata = null)
+    {
+        var m = new ChatMessageContent(authorRole, content, null, null, encoding, metadata);
+        this.Add(m);
+        return m;
+    }
 
     /// <summary>
     /// <param name="authorRole">Role of the message author</param>
@@ -66,8 +71,12 @@ public partial class ChatHistory : IList<ChatMessageContent>, IReadOnlyList<Chat
     /// <param name="encoding">Encoding of the message content</param>
     /// <param name="metadata">Dictionary for any additional metadata</param>
     /// </summary>
-    public void AddMessage(AuthorRole authorRole, ChatMessageContentItemCollection contentItems, Encoding? encoding = null, IReadOnlyDictionary<string, object?>? metadata = null) =>
-        this.Add(new ChatMessageContent(authorRole, contentItems, null, null, encoding, metadata));
+    public ChatMessageContent AddMessage(AuthorRole authorRole, ChatMessageContentItemCollection contentItems, Encoding? encoding = null, IReadOnlyDictionary<string, object?>? metadata = null)
+    {
+        var m = new ChatMessageContent(authorRole, contentItems, null, null, encoding, metadata);
+        this.Add(m);
+        return m;
+    }
 
     /// <summary>
     /// Add a user message to the chat history
@@ -142,7 +151,7 @@ public partial class ChatHistory : IList<ChatMessageContent>, IReadOnlyList<Chat
     /// <returns>The message at the specified index.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
     /// <exception cref="ArgumentOutOfRangeException">The <paramref name="index"/> was not valid for this history.</exception>
-    public ChatMessageContent this[int index]
+    public virtual ChatMessageContent this[int index]
     {
         get => this._messages[index];
         set
@@ -151,6 +160,8 @@ public partial class ChatHistory : IList<ChatMessageContent>, IReadOnlyList<Chat
             this._messages[index] = value;
         }
     }
+
+    public virtual ChatMessageContent Last => this._messages.Last();
 
     /// <summary>Determines whether a message is in the history.</summary>
     /// <param name="item">The message to locate.</param>

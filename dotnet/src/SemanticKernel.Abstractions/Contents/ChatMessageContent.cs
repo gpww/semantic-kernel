@@ -27,6 +27,8 @@ public class ChatMessageContent : KernelContent
     /// </summary>
     public AuthorRole Role { get; set; }
 
+    public int TokenCount { get; set; }
+
     /// <summary>
     /// A convenience property to get or set the text of the first item in the <see cref="Items" /> collection of <see cref="TextContent"/> type.
     /// </summary>

@@ -307,5 +307,15 @@ internal sealed class Agent : IAgent
 
             return function is not null;
         }
+
+        public override bool SetModelServiceName(string functionName, string modelServiceName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string? GetModelServiceName(string functionName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using Microsoft.SemanticKernel;
@@ -17,7 +18,7 @@ public class GlmClient : CustomAIClient
     //private readonly string _modelId = "chatglm_turbo";
     //private readonly string _apiKey = "f5ee8f8f18897ce66deb14a468ef3c30.K5qtVj1bvtWNJjpi";
     //private readonly string _pythonExecutablePath = "D:\\ProgramData\\anaconda3\\envs\\GLM\\python.exe";
-    private string Invoke(string message, double temperature, double topP, CancellationToken cancellationToken = default, string scriptPath = "PythonScript\\glm_client.py")
+    private async Task<string> InvokeAsync(string message, double temperature, double topP, string scriptPath = "PythonScript\\glm_client.py", CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(message))
         {
@@ -26,9 +27,9 @@ public class GlmClient : CustomAIClient
 
         string jsonString = this.GetJsonArgs("invoke", message, temperature, topP);
 
-        return SystemHelper.GetScriptOutput(this._pythonExecutablePath,
+        return await SystemHelper.GetScriptOutput(this._pythonExecutablePath,
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, scriptPath),
-            jsonString, cancellationToken);
+            jsonString, cancellationToken).ConfigureAwait(false);
     }
 
     private string GetJsonArgs(string funcType, string message, double temperature, double topP)
@@ -46,38 +47,41 @@ public class GlmClient : CustomAIClient
         return JsonSerializer.Serialize(json);
     }
 
-    private IEnumerable<string> InvokeSSE(string message, double temperature, double topP, CancellationToken cancellationToken = default, string scriptPath = "PythonScript\\glm_client.py")
+    private async IAsyncEnumerable<string> InvokeSSEAsync(string message, double temperature, double topP,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default, string scriptPath = "PythonScript\\glm_client.py")
     {
         if (string.IsNullOrEmpty(message))
         {
-            return null;
+            yield break;
         }
 
         string jsonString = this.GetJsonArgs("sse_invoke", message, temperature, topP);
 
-        return SystemHelper.GetLinesFromScriptOutput(this._pythonExecutablePath,
+        await foreach (var line in SystemHelper.GetLinesFromScriptOutput(this._pythonExecutablePath,
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, scriptPath),
-            jsonString, cancellationToken);
+            jsonString, cancellationToken))
+        {
+            yield return line;
+        }
     }
 
-    public override Task<string> GetTextContentsAsync(string text, OpenAIPromptExecutionSettings executionSettings, Kernel kernel, CancellationToken cancellationToken)
+    public override async Task<string> GetTextContentsAsync(string text, OpenAIPromptExecutionSettings executionSettings, Kernel kernel, CancellationToken cancellationToken)
     {
         //var reply = this.Invoke(text, requestSettings.Temperature, requestSettings.TopP);
         //return Task.FromResult<string>(reply);
 
-        var stream = this.InvokeSSE(text, executionSettings.Temperature, executionSettings.TopP, cancellationToken);
+        var stream = this.InvokeSSEAsync(text, executionSettings.Temperature, executionSettings.TopP, cancellationToken);
         var buffer = new StringBuilder();
-        foreach (var chunk in stream)
+        await foreach (var chunk in stream)
         {
             buffer.Append(chunk);
         }
-        return Task.FromResult<string>(buffer.ToString());
+        return buffer.ToString();
     }
 
     public override IAsyncEnumerable<string> GetStreamingTextContentsAsync(string text, OpenAIPromptExecutionSettings requestSettings, Kernel kernel, CancellationToken cancellationToken)
     {
-        var stream = this.InvokeSSE(text, requestSettings.Temperature, requestSettings.TopP, cancellationToken);
-        return stream.ToAsyncEnumerable();
+        return this.InvokeSSEAsync(text, requestSettings.Temperature, requestSettings.TopP, cancellationToken);
     }
 
     public override Task<IList<ReadOnlyMemory<float>>> GenerateEmbeddingsAsync(string modelId, IList<string> data, Kernel? kernel = null, CancellationToken cancellationToken = default)

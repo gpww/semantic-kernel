@@ -75,5 +75,15 @@ public class CustomMutablePlugin(ITestOutputHelper output) : BaseTest(output)
 
         /// <inheritdoc/>
         public override IEnumerator<KernelFunction> GetEnumerator() => this._functions.Values.GetEnumerator();
+
+        public override bool SetModelServiceName(string functionName, string modelServiceName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string? GetModelServiceName(string functionName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

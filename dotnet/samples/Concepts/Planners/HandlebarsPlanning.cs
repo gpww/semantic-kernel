@@ -36,12 +36,15 @@ public class HandlebarsPlanning(ITestOutputHelper output) : BaseTest(output)
         }
 
         var kernel = Kernel.CreateBuilder()
-            .AddAzureOpenAIChatCompletion(
-                deploymentName: chatDeploymentName,
-                endpoint: endpoint,
-                serviceId: "AzureOpenAIChat",
-                apiKey: apiKey,
-                modelId: chatModelId)
+            .AddOpenAIChatCompletion(
+                           modelId: chatModelId,
+                                          apiKey: apiKey)
+            //.AddAzureOpenAIChatCompletion(
+            //    deploymentName: chatDeploymentName,
+            //    endpoint: endpoint,
+            //    serviceId: "AzureOpenAIChat",
+            //    apiKey: apiKey,
+            //    modelId: chatModelId)
             .Build();
 
         if (pluginDirectoryNames.Length > 0)

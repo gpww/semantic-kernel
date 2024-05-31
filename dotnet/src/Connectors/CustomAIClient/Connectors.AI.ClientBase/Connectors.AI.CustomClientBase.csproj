@@ -12,8 +12,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="SixLabors.ImageSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\..\..\CSharp\Silver\Silver.csproj" />
-    <ProjectReference Include="..\..\..\..\..\..\kernel-memory-NL2SQL\service\Core\KernelMemory.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\TiktokenSharp\TiktokenSharp\TiktokenSharp.csproj" />
     <ProjectReference Include="..\..\..\SemanticKernel.Abstractions\SemanticKernel.Abstractions.csproj" />
     <ProjectReference Include="..\..\..\SemanticKernel.Core\SemanticKernel.Core.csproj" />
     <ProjectReference Include="..\..\Connectors.OpenAI\Connectors.OpenAI.csproj" />

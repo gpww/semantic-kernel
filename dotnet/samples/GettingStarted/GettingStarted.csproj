@@ -56,10 +56,9 @@
     <ProjectReference Include="..\..\src\Functions\Functions.Yaml\Functions.Yaml.csproj" />
     <ProjectReference Include="..\..\src\SemanticKernel.Abstractions\SemanticKernel.Abstractions.csproj" />
     <ProjectReference Include="..\..\src\SemanticKernel.Core\SemanticKernel.Core.csproj" />
-    <PackageReference Include="System.Text.Json" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Xunit" />
-    <Using Include="Xunit.Abstractions"/>
+    <Using Include="Xunit.Abstractions" />
   </ItemGroup>
 </Project>

@@ -1,10 +1,16 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
+using System;
+using System.Threading.Tasks;
+using Google.Apis.Http;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.Plugins.Web;
 using Microsoft.SemanticKernel.Plugins.Web.Bing;
 using Microsoft.SemanticKernel.Plugins.Web.Google;
+using Xunit;
+using Xunit.Abstractions;
+using Silver;
 
 namespace Search;
 
@@ -18,20 +24,15 @@ public class BingAndGooglePlugins(ITestOutputHelper output) : BaseTest(output)
     [Fact(Skip = "Setup Credentials")]
     public async Task RunAsync()
     {
-        string openAIModelId = TestConfiguration.OpenAI.ChatModelId;
-        string openAIApiKey = TestConfiguration.OpenAI.ApiKey;
-
-        if (openAIModelId is null || openAIApiKey is null)
-        {
-            Console.WriteLine("OpenAI credentials not found. Skipping example.");
-            return;
-        }
+        var httpClient = WebHelper.BuildHttpClient();
 
         Kernel kernel = Kernel.CreateBuilder()
             .AddOpenAIChatCompletion(
-                modelId: openAIModelId,
-                apiKey: openAIApiKey)
+                modelId: "openAIModelId",
+                apiKey: "openAIApiKey")
             .Build();
+
+        var question = "著作权许可使用和转让合同";
 
         // Load Bing plugin
         string bingApiKey = TestConfiguration.Bing.ApiKey;
@@ -41,11 +42,11 @@ public class BingAndGooglePlugins(ITestOutputHelper output) : BaseTest(output)
         }
         else
         {
-            var bingConnector = new BingConnector(bingApiKey);
+            var bingConnector = new BingConnector("2eff6992a4e0473298911d7d14e398b5", httpClient);
             var bing = new WebSearchEnginePlugin(bingConnector);
             kernel.ImportPluginFromObject(bing, "bing");
-            await Example1Async(kernel, "bing");
-            await Example2Async(kernel);
+            await Example1Async(bing, "bing", question);
+            //await Example2Async(kernel);
         }
 
         // Load Google plugin
@@ -60,26 +61,41 @@ public class BingAndGooglePlugins(ITestOutputHelper output) : BaseTest(output)
         {
             using var googleConnector = new GoogleConnector(
                 apiKey: googleApiKey,
-                searchEngineId: googleSearchEngineId);
+                searchEngineId: googleSearchEngineId,
+                httpClientFactory: new ProxySupportedHttpClientFactory());
             var google = new WebSearchEnginePlugin(googleConnector);
-            kernel.ImportPluginFromObject(new WebSearchEnginePlugin(googleConnector), "google");
-            // ReSharper disable once ArrangeThisQualifier
-            await Example1Async(kernel, "google");
+
+            kernel.ImportPluginFromObject(google, "google");
+            await Example1Async(google, "google", question);
+        }
+    }
+    public class ProxySupportedHttpClientFactory : IHttpClientFactory
+    {
+        private readonly string _proxy;
+        public ProxySupportedHttpClientFactory(string proxy = "http://localhost:7890")
+        {
+            _proxy = proxy;
+        }
+        public ConfigurableHttpClient CreateHttpClient(CreateHttpClientArgs args)
+        {
+            var httpClientHandler = WebHelper.BuildHttpClientHandler(_proxy);
+            return new ConfigurableHttpClient(handler: new ConfigurableMessageHandler(httpClientHandler), disposeHandler: true);
         }
     }
 
-    private async Task Example1Async(Kernel kernel, string searchPluginName)
+    private static async Task Example1Async(WebSearchEnginePlugin webSerchEngine, string searchPluginName, string question)
     {
         Console.WriteLine("======== Bing and Google Search Plugins ========");
 
         // Run
-        var question = "What's the largest building in the world?";
-        var function = kernel.Plugins[searchPluginName]["search"];
-        var result = await kernel.InvokeAsync(function, new() { ["query"] = question });
+        //var function = kernel.Functions.GetFunction(searchPluginName, "search");
+        //var result = await kernel.RunAsync(question, function);
+
+        var result = await webSerchEngine.SearchAsync(question, 10, 0, default);
 
         Console.WriteLine(question);
         Console.WriteLine($"----{searchPluginName}----");
-        Console.WriteLine(result.GetValue<string>());
+        Console.WriteLine(result);
 
         /* OUTPUT:
 

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\BaiduSyncdisk\Code\AGI\ChatSkills\CopilotChat.csproj" />
+    <ProjectReference Include="..\..\..\..\..\BaiduSyncdisk\Code\AGI\微信服务\WeChatSqlServer\ChatSqlServer.csproj" />
+    <ProjectReference Include="..\..\..\..\..\BaiduSyncdisk\Code\ChatBot\wechat-bot\WeChat\WeChat.csproj" />
+    <ProjectReference Include="..\..\..\..\..\BaiduSyncdisk\Code\CSharp\Silver\Silver.csproj" />
+    <ProjectReference Include="..\src\Connectors\Connectors.Memory.Qdrant\Connectors.Memory.Qdrant.csproj" />
+    <ProjectReference Include="..\src\SemanticKernel.Abstractions\SemanticKernel.Abstractions.csproj" />
+    <ProjectReference Include="..\src\SemanticKernel\SemanticKernel.csproj" />
+  </ItemGroup>
+
+</Project>

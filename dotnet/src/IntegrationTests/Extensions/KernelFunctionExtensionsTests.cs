@@ -108,6 +108,7 @@ public sealed class KernelFunctionExtensionsTests(ITestOutputHelper output) : ID
         public string? ModelId => null;
 
         public IReadOnlyDictionary<string, object?> Attributes => new Dictionary<string, object?>();
+        public string ServiceName { get; set; }
 
         public Task<IReadOnlyList<TextContent>> GetTextContentsAsync(string prompt, PromptExecutionSettings? executionSettings, Kernel? kernel, CancellationToken cancellationToken)
         {

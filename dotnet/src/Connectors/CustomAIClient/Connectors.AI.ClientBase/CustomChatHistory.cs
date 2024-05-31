@@ -42,17 +42,26 @@ public class CustomChatHistory : ChatHistory
     {
         //base.Add(item);
         this._messages.Enqueue(item);
-        item.TokenCount = DefaultGPTTokenizer.StaticCountTokens(item.Content);
+
+        if (item.TokenCount == 0)//如果不是来自OneAPI, 则消息没有计算过 token 数量
+        {
+            item.TokenCount = item.ComputeTokenCount();
+        }
     }
-    public override void SetSystemMessage(string content)
+
+    public override void UpdateSystemMessage(string? content)
     {
-        this._systemMessage = new ChatMessageContent(AuthorRole.System, content);
-        this._systemMessage.TokenCount = DefaultGPTTokenizer.StaticCountTokens(content);
+        if (!string.IsNullOrEmpty(content) && this._systemMessage?.Content != content)
+        {
+            this._systemMessage = new ChatMessageContent(AuthorRole.System, content);
+            this._systemMessage.TokenCount = TikToken.GetCount(content);
+        }
     }
     public override ChatMessageContent? SystemMessage => this._systemMessage;
     public override IEnumerator<ChatMessageContent> GetEnumerator()
     {
-        yield return this._systemMessage;
+        if (this._systemMessage != null)
+            yield return this._systemMessage;
         foreach (var msg in this._messages)
         {
             yield return msg;
@@ -70,7 +79,8 @@ public class CustomChatHistory : ChatHistory
             {
                 yield return msg;
             }
-            yield return this._systemMessage;
+            if (this._systemMessage != null)
+                yield return this._systemMessage;
         }
     }
 

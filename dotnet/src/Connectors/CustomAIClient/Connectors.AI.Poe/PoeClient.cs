@@ -1,4 +1,5 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using Microsoft.SemanticKernel;
@@ -15,11 +16,11 @@ public class PoeClient : CustomAIClient
         this._proxy = proxy;
     }
     private readonly string _proxy;
-    private IEnumerable<string> InvokeSSE(string message, double temperature, CancellationToken cancellationToken = default, string scriptPath = "PythonScript\\poe_client.py")
+    private async IAsyncEnumerable<string> InvokeSSEAsync(string message, double temperature, string scriptPath = "PythonScript\\poe_client.py", [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(message))
         {
-            return null;
+            yield break;
         }
 
         var json = new
@@ -33,26 +34,28 @@ public class PoeClient : CustomAIClient
 
         var jsonString = JsonSerializer.Serialize(json);
 
-        return SystemHelper.GetLinesFromScriptOutput(this._pythonExecutablePath,
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, scriptPath),
-            jsonString, cancellationToken);
+        await foreach (var line in SystemHelper.GetLinesFromScriptOutput(this._pythonExecutablePath,
+             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, scriptPath),
+             jsonString, cancellationToken).ConfigureAwait(false))
+        {
+            yield return line;
+        }
     }
 
-    public override Task<string> GetTextContentsAsync(string text, OpenAIPromptExecutionSettings requestSettings, Kernel kernel, CancellationToken cancellationToken)
+    public override async Task<string> GetTextContentsAsync(string text, OpenAIPromptExecutionSettings requestSettings, Kernel kernel, CancellationToken cancellationToken)
     {
-        var stream = this.InvokeSSE(text, requestSettings.Temperature, cancellationToken);
+        var stream = this.InvokeSSEAsync(text, requestSettings.Temperature, cancellationToken: cancellationToken);
         var buffer = new StringBuilder();
-        foreach (var chunk in stream)
+        await foreach (var chunk in stream.ConfigureAwait(false))
         {
             buffer.Append(chunk);
         }
-        return Task.FromResult<string>(buffer.ToString());
+        return buffer.ToString();
     }
 
     public override IAsyncEnumerable<string> GetStreamingTextContentsAsync(string text, OpenAIPromptExecutionSettings requestSettings, Kernel kernel, CancellationToken cancellationToken)
     {
-        var stream = this.InvokeSSE(text, requestSettings.Temperature, cancellationToken);
-        return stream.ToAsyncEnumerable();
+        return this.InvokeSSEAsync(text, requestSettings.Temperature, cancellationToken: cancellationToken);
     }
 
     public override Task<IList<ReadOnlyMemory<float>>> GenerateEmbeddingsAsync(string modelId, IList<string> data, Kernel? kernel = null, CancellationToken cancellationToken = default)
