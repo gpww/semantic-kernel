@@ -21,6 +21,7 @@ public sealed class OpenAITextToAudioService : ITextToAudioService
     /// OpenAI text-to-audio client for HTTP operations.
     /// </summary>
     private readonly OpenAITextToAudioClient _client;
+    public string ServiceName { get; set; }
 
     /// <summary>
     /// Gets the attribute name used to store the organization in the <see cref="IAIService.Attributes"/> dictionary.

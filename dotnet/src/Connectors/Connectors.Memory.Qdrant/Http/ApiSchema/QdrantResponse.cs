@@ -7,7 +7,7 @@ namespace Microsoft.SemanticKernel.Connectors.Qdrant;
 /// <summary>
 /// Base class for Qdrant response schema.
 /// </summary>
-internal abstract class QdrantResponse
+public class QdrantResponse
 {
     /// <summary>
     /// Response status

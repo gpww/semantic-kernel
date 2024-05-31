@@ -22,7 +22,7 @@ namespace Microsoft.SemanticKernel;
 /// An instance of <see cref="Kernel"/> is passed through to every function invocation and service call
 /// throughout the system, providing to each the ability to access shared state and services.
 /// </remarks>
-public sealed class Kernel
+public partial class Kernel
 {
     /// <summary>Key used by <see cref="IKernelBuilder"/> to store type information into the service provider.</summary>
     internal const string KernelServiceTypeToKeyMappings = nameof(KernelServiceTypeToKeyMappings);

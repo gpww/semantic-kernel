@@ -21,7 +21,7 @@ namespace Microsoft.SemanticKernel;
 /// A Semantic Kernel "Semantic" prompt function.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-internal sealed class KernelFunctionFromPrompt : KernelFunction
+public partial class KernelFunctionFromPrompt : KernelFunction
 {
     /// <summary>
     /// Creates a <see cref="KernelFunction"/> instance for a prompt specified via a prompt template.
@@ -269,6 +269,8 @@ internal sealed class KernelFunctionFromPrompt : KernelFunction
 
         this._promptTemplate = template;
         this._inputVariables = inputVariables.Select(iv => new InputVariable(iv)).ToList();
+        this._inputVariables = promptConfig.InputVariables.Select(iv => new InputVariable(iv)).ToList();
+        this._promptConfig = promptConfig;
     }
 
     #region private

@@ -25,7 +25,7 @@ namespace Microsoft.SemanticKernel;
 /// <summary>
 /// Provides extension methods for <see cref="IServiceCollection"/> and related classes to configure OpenAI and Azure OpenAI connectors.
 /// </summary>
-public static class OpenAIServiceCollectionExtensions
+public static partial class OpenAIServiceCollectionExtensions
 {
     #region Text Completion
 
@@ -357,7 +357,8 @@ public static class OpenAIServiceCollectionExtensions
         Verify.NotNullOrWhiteSpace(apiKey);
 
         builder.Services.AddKeyedSingleton<ITextEmbeddingGenerationService>(serviceId, (serviceProvider, _) =>
-            new AzureOpenAITextEmbeddingGenerationService(
+        {
+            var service = new AzureOpenAITextEmbeddingGenerationService(
                 deploymentName,
                 endpoint,
                 apiKey,
@@ -365,6 +366,10 @@ public static class OpenAIServiceCollectionExtensions
                 HttpClientProvider.GetHttpClient(httpClient, serviceProvider),
                 serviceProvider.GetService<ILoggerFactory>(),
                 dimensions));
+                serviceProvider.GetService<ILoggerFactory>());
+            service.ServiceName = serviceId;
+            return service;
+        });
 
         return builder;
     }
@@ -711,7 +716,9 @@ public static class OpenAIServiceCollectionExtensions
                 new AzureKeyCredential(apiKey),
                 HttpClientProvider.GetHttpClient(httpClient, serviceProvider));
 
-            return new(deploymentName, client, modelId, serviceProvider.GetService<ILoggerFactory>());
+            var service = new AzureOpenAIChatCompletionService(deploymentName, client, modelId, serviceProvider.GetService<ILoggerFactory>());
+            service.ServiceName = serviceId;
+            return service;
         };
 
         builder.Services.AddKeyedSingleton<IChatCompletionService>(serviceId, factory);

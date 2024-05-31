@@ -185,8 +185,7 @@ internal abstract class ClientCore
 
         using var activity = ModelDiagnostics.StartCompletionActivity(this.Endpoint, this.DeploymentOrModelName, ModelProvider, prompt, textExecutionSettings);
 
-        StreamingResponse<Completions> response;
-        try
+        await foreach (Completions completions in response.ConfigureAwait(false))
         {
             response = await RunRequestAsync(() => this.Client.GetCompletionsStreamingAsync(options, cancellationToken)).ConfigureAwait(false);
         }
@@ -642,7 +641,9 @@ internal abstract class ClientCore
         bool autoInvoke = kernel is not null && chatExecutionSettings.ToolCallBehavior?.MaximumAutoInvokeAttempts > 0 && s_inflightAutoInvokes.Value < MaxInflightAutoInvokes;
         ValidateAutoInvoke(autoInvoke, chatExecutionSettings.ResultsPerPrompt);
 
-        var chatOptions = this.CreateChatCompletionsOptions(chatExecutionSettings, chat, kernel, this.DeploymentOrModelName);
+        var chatOptions = CreateChatCompletionsOptions(chatExecutionSettings, chat, kernel, this.DeploymentOrModelName);
+        executionSettings?.AddOrUpdateExtensionData(KernelArguments.ChatHistoryJson, chatOptions.GetMessagesJson());
+        executionSettings?.AddOrUpdateExtensionData(KernelArguments.ToolsJson, chatOptions.GetToolsJson());//这个时候增加了 functions
 
         StringBuilder? contentBuilder = null;
         Dictionary<int, string>? toolCallIdsByIndex = null;
@@ -825,19 +826,11 @@ internal abstract class ClientCore
                 s_inflightAutoInvokes.Value++;
                 try
                 {
-                    invocationContext = await OnAutoFunctionInvocationAsync(kernel, invocationContext, async (context) =>
-                    {
-                        // Check if filter requested termination.
-                        if (context.Terminate)
-                        {
-                            return;
-                        }
-
-                        // Note that we explicitly do not use executionSettings here; those pertain to the all-up operation and not necessarily to any
-                        // further calls made as part of this function invocation. In particular, we must not use function calling settings naively here,
-                        // as the called function could in turn telling the model about itself as a possible candidate for invocation.
-                        context.Result = await function.InvokeAsync(kernel, invocationContext.Arguments, cancellationToken: cancellationToken).ConfigureAwait(false);
-                    }).ConfigureAwait(false);
+                    functionArgs.AddExtensionData(executionSettings);
+                    // Note that we explicitly do not use executionSettings here; those pertain to the all-up operation and not necessarily to any
+                    // further calls made as part of this function invocation. In particular, we must not use function calling settings naively here,
+                    // as the called function could in turn telling the model about itself as a possible candidate for invocation.
+                    functionResult = (await function.InvokeAsync(kernel, functionArgs, cancellationToken: cancellationToken).ConfigureAwait(false)).GetValue<object>() ?? string.Empty;
                 }
 #pragma warning disable CA1031 // Do not catch general exception types
                 catch (Exception e)
@@ -1106,8 +1099,8 @@ internal abstract class ClientCore
             DeploymentName = deploymentOrModelName,
             Seed = executionSettings.Seed,
             User = executionSettings.User,
-            LogProbabilitiesPerToken = executionSettings.TopLogprobs,
-            EnableLogProbabilities = executionSettings.Logprobs
+            EnableLogProbabilities = executionSettings.EnableLogProbabilities,
+            LogProbabilitiesPerToken = executionSettings.LogProbabilitiesPerToken
         };
 
         switch (executionSettings.ResponseFormat)
@@ -1209,7 +1202,7 @@ internal abstract class ClientCore
         throw new NotImplementedException($"Role {chatRole} is not implemented");
     }
 
-    private static List<ChatRequestMessage> GetRequestMessages(ChatMessageContent message, ToolCallBehavior? toolCallBehavior)
+    internal static ChatRequestMessage GetRequestMessage(ChatMessageContent message)
     {
         if (message.Role == AuthorRole.System)
         {

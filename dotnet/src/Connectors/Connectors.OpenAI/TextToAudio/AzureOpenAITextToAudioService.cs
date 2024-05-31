@@ -21,6 +21,7 @@ public sealed class AzureOpenAITextToAudioService : ITextToAudioService
     /// Azure OpenAI text-to-audio client for HTTP operations.
     /// </summary>
     private readonly AzureOpenAITextToAudioClient _client;
+    public string ServiceName { get; set; }
 
     /// <inheritdoc/>
     public IReadOnlyDictionary<string, object?> Attributes => this._client.Attributes;

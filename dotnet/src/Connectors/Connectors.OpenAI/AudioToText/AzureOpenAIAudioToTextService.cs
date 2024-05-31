@@ -21,6 +21,7 @@ public sealed class AzureOpenAIAudioToTextService : IAudioToTextService
 {
     /// <summary>Core implementation shared by Azure OpenAI services.</summary>
     private readonly AzureOpenAIClientCore _core;
+    public string ServiceName { get; set; }
 
     /// <inheritdoc/>
     public IReadOnlyDictionary<string, object?> Attributes => this._core.Attributes;

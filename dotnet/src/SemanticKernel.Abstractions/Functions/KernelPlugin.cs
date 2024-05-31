@@ -19,7 +19,7 @@ namespace Microsoft.SemanticKernel;
 /// </remarks>
 [DebuggerDisplay("Name = {Name}, Functions = {FunctionCount}")]
 [DebuggerTypeProxy(typeof(KernelPlugin.TypeProxy))]
-public abstract class KernelPlugin : IEnumerable<KernelFunction>
+public abstract partial class KernelPlugin : IEnumerable<KernelFunction>
 {
     /// <summary>Initializes the new plugin from the provided name, description, and function collection.</summary>
     /// <param name="name">The name for the plugin.</param>
@@ -39,6 +39,11 @@ public abstract class KernelPlugin : IEnumerable<KernelFunction>
 
     /// <summary>Gets a description of the plugin.</summary>
     public string Description { get; }
+
+    /// <summary>
+    /// 是否发送到服务器端作为 FunctionCall候选
+    /// </summary>
+    public bool FunctionCallAvailable { get; set; } = false;
 
     /// <summary>Gets the function in the plugin with the specified name.</summary>
     /// <param name="functionName">The name of the function.</param>
@@ -105,5 +110,10 @@ public abstract class KernelPlugin : IEnumerable<KernelFunction>
         public string Description => this._plugin.Description;
 
         public KernelFunction[] Functions => [.. this._plugin.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase)];
+    }
+
+    public override string ToString()
+    {
+        return string.Format("{0}: {1}", this.Name, this.Description);
     }
 }

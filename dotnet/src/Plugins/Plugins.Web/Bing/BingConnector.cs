@@ -102,6 +102,11 @@ public sealed class BingConnector : IWebSearchEngineConnector
             returnValues.Take(count);
     }
 
+    public async Task<IEnumerable<string>> SearchAsync(string query, int count, int offset, CancellationToken cancellationToken)
+    {
+        var results = await this.SearchWebPagesAsync(query, count, offset, cancellationToken).ConfigureAwait(false);
+        return results.Select(item => item.Snippet);
+    }
     /// <summary>
     /// Sends a GET request to the specified URI.
     /// </summary>
@@ -118,5 +123,21 @@ public sealed class BingConnector : IWebSearchEngineConnector
         }
 
         return await this._httpClient.SendWithSuccessCheckAsync(httpRequestMessage, cancellationToken).ConfigureAwait(false);
+    }
+
+    [SuppressMessage("Performance", "CA1812:Internal class that is apparently never instantiated",
+        Justification = "Class is instantiated through deserialization.")]
+    private sealed class BingSearchResponse
+    {
+        [JsonPropertyName("webPages")]
+        public WebPages? WebPages { get; set; }
+    }
+
+    [SuppressMessage("Performance", "CA1812:Internal class that is apparently never instantiated",
+        Justification = "Class is instantiated through deserialization.")]
+    private sealed class WebPages
+    {
+        [JsonPropertyName("value")]
+        public WebPage[]? Value { get; set; }
     }
 }

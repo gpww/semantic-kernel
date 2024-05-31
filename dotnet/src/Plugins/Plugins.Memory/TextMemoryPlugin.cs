@@ -80,7 +80,6 @@ public sealed class TextMemoryPlugin
         {
             this._logger.LogDebug("Recalling memory with key '{0}' from collection '{1}'", key, collection);
         }
-
         var memory = await this._memory.GetAsync(collection, key, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         return memory?.Metadata.Text ?? string.Empty;

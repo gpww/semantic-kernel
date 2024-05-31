@@ -3,6 +3,7 @@
 using System;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using Azure.AI.OpenAI;
 using Azure.Core;
 using Microsoft.Extensions.Logging;
@@ -14,7 +15,7 @@ namespace Microsoft.SemanticKernel.Connectors.OpenAI;
 /// <summary>
 /// Core implementation for OpenAI clients, providing common functionality and properties.
 /// </summary>
-internal sealed class OpenAIClientCore : ClientCore
+internal partial class OpenAIClientCore : ClientCore
 {
     private const string DefaultPublicEndpoint = "https://api.openai.com/v1";
 
@@ -22,11 +23,6 @@ internal sealed class OpenAIClientCore : ClientCore
     /// Gets the attribute name used to store the organization in the <see cref="IAIService.Attributes"/> dictionary.
     /// </summary>
     public static string OrganizationKey => "Organization";
-
-    /// <summary>
-    /// OpenAI / Azure OpenAI Client
-    /// </summary>
-    internal override OpenAIClient Client { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OpenAIClientCore"/> class.
@@ -43,7 +39,7 @@ internal sealed class OpenAIClientCore : ClientCore
         Uri? endpoint = null,
         string? organization = null,
         HttpClient? httpClient = null,
-        ILogger? logger = null) : base(logger)
+        ILogger? logger = null) : this(modelId, apiKey, null, organization, httpClient, logger)
     {
         Verify.NotNullOrWhiteSpace(modelId);
 
@@ -71,6 +67,10 @@ internal sealed class OpenAIClientCore : ClientCore
 
         this.Client = new OpenAIClient(apiKey ?? string.Empty, options);
     }
+    /// <summary>
+    /// OpenAI / Azure OpenAI Client
+    /// </summary>
+    internal override OpenAIClient Client { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OpenAIClientCore"/> class using the specified OpenAIClient.

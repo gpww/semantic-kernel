@@ -22,6 +22,7 @@ public sealed class AzureOpenAITextEmbeddingGenerationService : ITextEmbeddingGe
 {
     private readonly AzureOpenAIClientCore _core;
     private readonly int? _dimensions;
+    public string ServiceName { get; set; }
 
     /// <summary>
     /// Creates a new <see cref="AzureOpenAITextEmbeddingGenerationService"/> client instance using API Key auth.

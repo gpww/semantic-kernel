@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>12.0</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="CustomChatResult.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\..\..\CSharp\Silver\Silver.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\kernel-memory-NL2SQL\service\Core\KernelMemory.Core.csproj" />
+    <ProjectReference Include="..\..\..\SemanticKernel.Abstractions\SemanticKernel.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\SemanticKernel.Core\SemanticKernel.Core.csproj" />
+    <ProjectReference Include="..\..\Connectors.OpenAI\Connectors.OpenAI.csproj" />
+  </ItemGroup>
+
+</Project>

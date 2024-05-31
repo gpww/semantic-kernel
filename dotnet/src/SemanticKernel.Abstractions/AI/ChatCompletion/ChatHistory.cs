@@ -13,7 +13,7 @@ namespace Microsoft.SemanticKernel.ChatCompletion;
 /// <summary>
 /// Provides a history of chat messages from a chat conversation.
 /// </summary>
-public class ChatHistory : IList<ChatMessageContent>, IReadOnlyList<ChatMessageContent>
+public partial class ChatHistory : IList<ChatMessageContent>, IReadOnlyList<ChatMessageContent>
 {
     /// <summary>The messages.</summary>
     private readonly List<ChatMessageContent> _messages;
@@ -49,7 +49,7 @@ public class ChatHistory : IList<ChatMessageContent>, IReadOnlyList<ChatMessageC
     }
 
     /// <summary>Gets the number of messages in the history.</summary>
-    public int Count => this._messages.Count;
+    public virtual int Count => this._messages.Count;
 
     /// <summary>
     /// <param name="authorRole">Role of the message author</param>
@@ -94,13 +94,12 @@ public class ChatHistory : IList<ChatMessageContent>, IReadOnlyList<ChatMessageC
     /// Add a system message to the chat history
     /// </summary>
     /// <param name="content">Message content</param>
-    public void AddSystemMessage(string content) =>
-        this.AddMessage(AuthorRole.System, content);
+    public virtual void AddSystemMessage(string content) => this.AddMessage(AuthorRole.System, content);
 
     /// <summary>Adds a message to the history.</summary>
     /// <param name="item">The message to add.</param>
     /// <exception cref="ArgumentNullException"><paramref name="item"/> is null.</exception>
-    public void Add(ChatMessageContent item)
+    public virtual void Add(ChatMessageContent item)
     {
         Verify.NotNull(item);
         this._messages.Add(item);
@@ -136,7 +135,7 @@ public class ChatHistory : IList<ChatMessageContent>, IReadOnlyList<ChatMessageC
     public void CopyTo(ChatMessageContent[] array, int arrayIndex) => this._messages.CopyTo(array, arrayIndex);
 
     /// <summary>Removes all messages from the history.</summary>
-    public void Clear() => this._messages.Clear();
+    public virtual void Clear() => this._messages.Clear();
 
     /// <summary>Gets or sets the message at the specified index in the history.</summary>
     /// <param name="index">The index of the message to get or set.</param>
@@ -205,8 +204,8 @@ public class ChatHistory : IList<ChatMessageContent>, IReadOnlyList<ChatMessageC
     bool ICollection<ChatMessageContent>.IsReadOnly => false;
 
     /// <inheritdoc/>
-    IEnumerator<ChatMessageContent> IEnumerable<ChatMessageContent>.GetEnumerator() => this._messages.GetEnumerator();
+    public virtual IEnumerator<ChatMessageContent> GetEnumerator() => this._messages.GetEnumerator();
 
     /// <inheritdoc/>
-    IEnumerator IEnumerable.GetEnumerator() => this._messages.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 }

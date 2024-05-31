@@ -9,7 +9,7 @@ namespace Microsoft.SemanticKernel;
 /// <summary>
 /// Provides an <see cref="KernelPlugin"/> implementation around a collection of functions.
 /// </summary>
-internal sealed class DefaultKernelPlugin : KernelPlugin
+public partial class DefaultKernelPlugin : KernelPlugin
 {
     /// <summary>The collection of functions associated with this plugin.</summary>
     private readonly Dictionary<string, KernelFunction> _functions;
@@ -22,7 +22,7 @@ internal sealed class DefaultKernelPlugin : KernelPlugin
     /// <exception cref="ArgumentException"><paramref name="name"/> is an invalid plugin name.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="functions"/> contains a null function.</exception>
     /// <exception cref="ArgumentException"><paramref name="functions"/> contains two functions with the same name.</exception>
-    internal DefaultKernelPlugin(string name, string? description, IEnumerable<KernelFunction>? functions = null) : base(name, description)
+    public DefaultKernelPlugin(string name, string? description, IEnumerable<KernelFunction>? functions = null) : base(name, description)
     {
         this._functions = new Dictionary<string, KernelFunction>(StringComparer.OrdinalIgnoreCase);
         if (functions is not null)

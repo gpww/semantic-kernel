@@ -19,6 +19,7 @@ namespace Microsoft.SemanticKernel.Connectors.OpenAI;
 public sealed class OpenAITextToImageService : ITextToImageService
 {
     private readonly OpenAITextToImageClientCore _core;
+    public string ServiceName { get; set; }
 
     /// <summary>
     /// OpenAI REST API endpoint

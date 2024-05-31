@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Microsoft.SemanticKernel;
 
@@ -83,10 +84,10 @@ public static class KernelPluginExtensions
     {
         Verify.NotNull(plugins);
 
-        List<KernelFunctionMetadata> metadata = [];
-        foreach (KernelPlugin plugin in plugins)
+        List<KernelFunctionMetadata> metadata = new();
+        foreach (KernelPlugin plugin in plugins.Where(p => p.FunctionCallAvailable))
         {
-            metadata.AddRange(plugin.GetFunctionsMetadata());
+            metadata.AddRange(plugin.GetFunctionsMetadata().Where(f => f.FunctionCallAvailable));
         }
 
         return metadata;

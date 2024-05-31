@@ -21,6 +21,7 @@ public sealed class OpenAITextEmbeddingGenerationService : ITextEmbeddingGenerat
 {
     private readonly OpenAIClientCore _core;
     private readonly int? _dimensions;
+    public string ServiceName { get; set; }
 
     /// <summary>
     /// Create an instance of the OpenAI text embedding connector

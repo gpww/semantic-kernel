@@ -30,6 +30,7 @@ public sealed class AzureOpenAITextToImageService : ITextToImageService
 
     /// <inheritdoc/>
     public IReadOnlyDictionary<string, object?> Attributes => this._attributes;
+    public string ServiceName { get; set; }
 
     /// <summary>
     /// Gets the key used to store the deployment name in the <see cref="IAIService.Attributes"/> dictionary.
