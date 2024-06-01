@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,14 +28,6 @@ public class WebSearchEnginePlugin
     private readonly IWebSearchEngineConnector _connector;
 
     /// <summary>
-    /// The usage of JavaScriptEncoder.UnsafeRelaxedJsonEscaping here is considered safe in this context
-    /// because the JSON result is not used for any security sensitive operations like HTML injection.
-    /// </summary>
-    private static readonly JsonSerializerOptions s_jsonOptionsCache = new()
-    {
-        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-    };
-    /// <summary>
     /// Initializes a new instance of the <see cref="WebSearchEnginePlugin"/> class.
     /// </summary>
     /// <param name="connector">The web search engine connector.</param>
@@ -56,7 +47,7 @@ public class WebSearchEnginePlugin
     private async Task<IEnumerable<WebPage>> Search10WebPagesAsync(
         string query, int count = 10, int offset = 0, CancellationToken cancellationToken = default)
     {
-        var results = await this._connector.SearchWebPagesAsync(query, count, offset, cancellationToken).ConfigureAwait(false);
+        var results = await this._connector.SearchAsync<WebPage>(query, count, offset, cancellationToken).ConfigureAwait(false);
         if (!results.Any())
         {
             return new List<WebPage>();

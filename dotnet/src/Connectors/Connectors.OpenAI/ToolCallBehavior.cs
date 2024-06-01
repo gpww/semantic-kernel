@@ -145,7 +145,7 @@ public abstract class ToolCallBehavior
                     options.ToolChoice = ChatCompletionsToolChoice.Auto;
                     for (int i = 0; i < functions.Count; i++)
                     {
-                        options.Tools.Add(new ChatCompletionsFunctionToolDefinition(functions[i].ToOpenAIFunction().ToFunctionDefinition()));
+                        options.Tools.AddAsync(new ChatCompletionsFunctionToolDefinition(functions[i].ToOpenAIFunction().ToFunctionDefinition()));
                     }
                 }
             }
@@ -211,7 +211,7 @@ public abstract class ToolCallBehavior
                     }
 
                     // Add the function.
-                    options.Tools.Add(functions[i]);
+                    options.Tools.AddAsync(functions[i]);
                 }
             }
         }
@@ -254,7 +254,7 @@ public abstract class ToolCallBehavior
             }
 
             options.ToolChoice = this._choice;
-            options.Tools.Add(this._tool);
+            options.Tools.AddAsync(this._tool);
         }
 
         /// <summary>Gets how many requests are part of a single interaction should include this tool in the request.</summary>

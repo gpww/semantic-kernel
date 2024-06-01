@@ -32,5 +32,5 @@ public class OpenAIClient2 : OpenAIClient
         return endPoint;
     }
 
-    private string _openAIApiKey;
+    private readonly string _openAIApiKey;
 }

@@ -56,8 +56,7 @@ public static class ChatHistoryExtensions
         if (messageContents.Count != 0)
         {
             var role = streamedRole ?? AuthorRole.Assistant;
-
-            chatHistory.Add(
+            await chatHistory.AddAsync(
                 new OpenAIChatMessageContent(
                     role,
                     contentBuilder?.ToString() ?? string.Empty,

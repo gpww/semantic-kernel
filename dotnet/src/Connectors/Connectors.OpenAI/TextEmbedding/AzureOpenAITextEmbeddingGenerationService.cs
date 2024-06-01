@@ -22,6 +22,7 @@ public sealed class AzureOpenAITextEmbeddingGenerationService : ITextEmbeddingGe
 {
     private readonly AzureOpenAIClientCore _core;
     private readonly int? _dimensions;
+    /// <inheritdoc/>
     public string ServiceName { get; set; }
 
     /// <summary>

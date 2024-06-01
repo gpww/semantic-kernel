@@ -51,6 +51,7 @@ public sealed class AzureOpenAIChatCompletionWithDataService : IChatCompletionSe
 
     /// <inheritdoc/>
     public IReadOnlyDictionary<string, object?> Attributes => this._attributes;
+    /// <inheritdoc/>
     public string ServiceName { get; set; }
 
     /// <inheritdoc/>

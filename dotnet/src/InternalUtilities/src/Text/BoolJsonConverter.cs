@@ -1,10 +1,12 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+
+using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Microsoft.SemanticKernel.Text;
 
-internal class BoolJsonConverter : JsonConverter<bool>
+internal sealed class BoolJsonConverter : JsonConverter<bool>
 {
     public override bool Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

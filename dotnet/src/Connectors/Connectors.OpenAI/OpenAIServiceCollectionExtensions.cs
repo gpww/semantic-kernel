@@ -365,9 +365,10 @@ public static partial class OpenAIServiceCollectionExtensions
                 modelId,
                 HttpClientProvider.GetHttpClient(httpClient, serviceProvider),
                 serviceProvider.GetService<ILoggerFactory>(),
-                dimensions));
-                serviceProvider.GetService<ILoggerFactory>());
+                dimensions);
+
             service.ServiceName = serviceId;
+
             return service;
         });
 
@@ -706,7 +707,7 @@ public static partial class OpenAIServiceCollectionExtensions
     {
         Verify.NotNull(builder);
         Verify.NotNullOrWhiteSpace(deploymentName);
-        Verify.NotNullOrWhiteSpace(endpoint);
+        Verify.NotNullOrWhiteSpace(endpoint.Trim());
         Verify.NotNullOrWhiteSpace(apiKey);
 
         Func<IServiceProvider, object?, AzureOpenAIChatCompletionService> factory = (serviceProvider, _) =>

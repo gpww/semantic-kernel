@@ -37,7 +37,8 @@ public partial class ChatHistory : IList<ChatMessageContent>, IReadOnlyList<Chat
         Verify.NotNullOrWhiteSpace(systemMessage);
 
         this._messages = [];
-        this.AddSystemMessage(systemMessage);
+        //this.AddSystemMessage(systemMessage);
+        this.AddMessage(AuthorRole.System, systemMessage);
     }
 
     /// <summary>Initializes the history will all of the specified messages.</summary>

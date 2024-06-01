@@ -1,18 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
 using System;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Microsoft.SemanticKernel;
 
-/// <summary>
-/// A Semantic Kernel "Semantic" prompt function.
-/// </summary>
-[DebuggerDisplay("{DebuggerDisplay,nq}")]
-public partial class KernelFunctionFromPrompt : KernelFunction
+public partial class KernelFunctionFromPrompt
 {
-    private PromptTemplateConfig _promptConfig = null;
+    private readonly PromptTemplateConfig _promptConfig = null;
     public string TemplateText
     {
         get => this._promptConfig.Template;

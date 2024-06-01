@@ -21,7 +21,7 @@ namespace Microsoft.SemanticKernel;
 /// A Semantic Kernel "Semantic" prompt function.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public partial class KernelFunctionFromPrompt : KernelFunction
+public sealed partial class KernelFunctionFromPrompt : KernelFunction
 {
     /// <summary>
     /// Creates a <see cref="KernelFunction"/> instance for a prompt specified via a prompt template.
@@ -229,6 +229,7 @@ public partial class KernelFunctionFromPrompt : KernelFunction
             this.Metadata.ReturnParameter,
             this.ExecutionSettings as Dictionary<string, PromptExecutionSettings> ?? this.ExecutionSettings!.ToDictionary(kv => kv.Key, kv => kv.Value),
             this._inputVariables,
+            this._promptConfig,
             this._logger);
     }
 
@@ -244,6 +245,7 @@ public partial class KernelFunctionFromPrompt : KernelFunction
             promptConfig.GetKernelReturnParameterMetadata(),
             promptConfig.ExecutionSettings,
             promptConfig.InputVariables,
+            promptConfig,
             logger)
     {
     }
@@ -257,6 +259,7 @@ public partial class KernelFunctionFromPrompt : KernelFunction
         KernelReturnParameterMetadata? returnParameter,
         Dictionary<string, PromptExecutionSettings> executionSettings,
         List<InputVariable> inputVariables,
+        PromptTemplateConfig promptConfig,
         ILogger logger) : base(
             functionName ?? CreateRandomFunctionName(),
             pluginName,

@@ -1,4 +1,6 @@
-﻿using Microsoft.SemanticKernel;
+﻿// Copyright (c) Microsoft. All rights reserved.
+
+using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.Services;
@@ -12,14 +14,18 @@ public abstract class CustomAIClient
         this._modelId = modelId;
         this.Attributes.Add(AIServiceExtensions.ModelIdKey, modelId);
     }
+
+    protected CustomAIClient(string modelId, string apiKey) : this(modelId)
+    {
+        this._apiKey = apiKey;
+    }
     /// <summary>
     /// Storage for AI service attributes.
     /// </summary>
     internal Dictionary<string, object?> Attributes { get; } = new();
 
-    public CustomAIClient(string modelId, string apiKey, string pythonExecutablePath) : this(modelId)
+    protected CustomAIClient(string modelId, string apiKey, string pythonExecutablePath) : this(modelId, apiKey)
     {
-        this._apiKey = apiKey;
         this._pythonExecutablePath = pythonExecutablePath;
     }
     protected readonly string _modelId;

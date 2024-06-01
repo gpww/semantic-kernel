@@ -12,7 +12,7 @@ public partial class KernelArguments
     public T Get<T>(string key)
     {
         var v = this[key];
-        return v == null ? default(T) : (T)Convert.ChangeType(v, typeof(T));
+        return v == null ? default : (T)Convert.ChangeType(v, typeof(T));
     }
     public bool IsEmpty(string key) => !this._arguments.ContainsKey(key) || this[key] == null || string.IsNullOrWhiteSpace(this[key].ToString());
 

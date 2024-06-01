@@ -30,6 +30,7 @@ public sealed class AzureOpenAITextToImageService : ITextToImageService
 
     /// <inheritdoc/>
     public IReadOnlyDictionary<string, object?> Attributes => this._attributes;
+    /// <inheritdoc/>
     public string ServiceName { get; set; }
 
     /// <summary>

@@ -21,6 +21,7 @@ public sealed class OpenAITextEmbeddingGenerationService : ITextEmbeddingGenerat
 {
     private readonly OpenAIClientCore _core;
     private readonly int? _dimensions;
+    /// <inheritdoc/>
     public string ServiceName { get; set; }
 
     /// <summary>

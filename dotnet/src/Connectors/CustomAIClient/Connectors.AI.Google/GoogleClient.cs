@@ -95,7 +95,7 @@ public class GoogleClient : CustomAIClient
             GenerationConfig = this.ToGenerationConfig(executionSettings)
         };
 
-        await foreach (var chunk in this._generativeModel.GetStreamContentAsync(_modelId, request, cancellationToken).ConfigureAwait(false))
+        await foreach (var chunk in this._generativeModel.GetStreamContentAsync(this._modelId, request, cancellationToken).ConfigureAwait(false))
         {
             if (string.IsNullOrEmpty(chunk))
             {

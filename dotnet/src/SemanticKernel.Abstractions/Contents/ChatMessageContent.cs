@@ -68,8 +68,6 @@ public class ChatMessageContent : KernelContent
         }
     }
 
-    public int TokenCount { get; set; }
-
     /// <summary>
     /// Chat message content items
     /// </summary>

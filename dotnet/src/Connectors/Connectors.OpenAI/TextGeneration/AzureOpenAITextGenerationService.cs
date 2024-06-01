@@ -18,6 +18,7 @@ namespace Microsoft.SemanticKernel.Connectors.OpenAI;
 public sealed class AzureOpenAITextGenerationService : ITextGenerationService
 {
     private readonly AzureOpenAIClientCore _core;
+    /// <inheritdoc/>
     public string ServiceName { get; set; }
 
     /// <inheritdoc/>

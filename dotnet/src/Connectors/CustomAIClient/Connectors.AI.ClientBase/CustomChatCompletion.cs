@@ -29,10 +29,8 @@ public abstract class CustomChatCompletion : ITextGenerationService, IChatComple
         {
             return executionSettings as OpenAIPromptExecutionSettings;
         }
-        else
-        {
-            return new OpenAIPromptExecutionSettings();
-        }
+
+        return new OpenAIPromptExecutionSettings();
     }
 
     public async Task<IReadOnlyList<TextContent>> GetTextContentsAsync(string prompt,

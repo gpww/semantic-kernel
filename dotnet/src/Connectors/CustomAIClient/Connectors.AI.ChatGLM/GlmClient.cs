@@ -59,7 +59,7 @@ public class GlmClient : CustomAIClient
 
         await foreach (var line in SystemHelper.GetLinesFromScriptOutput(this._pythonExecutablePath,
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, scriptPath),
-            jsonString, cancellationToken))
+            jsonString, cancellationToken).ConfigureAwait(false))
         {
             yield return line;
         }
@@ -72,7 +72,7 @@ public class GlmClient : CustomAIClient
 
         var stream = this.InvokeSSEAsync(text, executionSettings.Temperature, executionSettings.TopP, cancellationToken);
         var buffer = new StringBuilder();
-        await foreach (var chunk in stream)
+        await foreach (var chunk in stream.ConfigureAwait(false))
         {
             buffer.Append(chunk);
         }

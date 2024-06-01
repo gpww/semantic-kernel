@@ -4,6 +4,7 @@ using Microsoft.SemanticKernel;
 using TiktokenSharp;
 
 namespace Connectors.AI;
+
 public static class ChatMessageContentExtensions
 {
     /// <summary>

@@ -1,10 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
 using System.Collections.Concurrent;
-using Microsoft.KernelMemory.AI.OpenAI;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
+using TiktokenSharp;
+using Connectors.AI;
 
 namespace Connectors.AI;
 
@@ -61,7 +62,10 @@ public class CustomChatHistory : ChatHistory
     public override IEnumerator<ChatMessageContent> GetEnumerator()
     {
         if (this._systemMessage != null)
+        {
             yield return this._systemMessage;
+        }
+
         foreach (var msg in this._messages)
         {
             yield return msg;
@@ -80,7 +84,9 @@ public class CustomChatHistory : ChatHistory
                 yield return msg;
             }
             if (this._systemMessage != null)
+            {
                 yield return this._systemMessage;
+            }
         }
     }
 

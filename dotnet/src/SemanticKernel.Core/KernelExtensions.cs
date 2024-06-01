@@ -217,7 +217,7 @@ public static class KernelExtensions
     public static KernelPlugin ImportPluginFromType<T>(this Kernel kernel, string? pluginName = null)
     {
         KernelPlugin plugin = CreatePluginFromType<T>(kernel, pluginName);
-        kernel.Plugins.Add(plugin);
+        kernel.Plugins.AddAsync(plugin);
         return plugin;
     }
 
@@ -238,7 +238,7 @@ public static class KernelExtensions
         Verify.NotNull(plugins);
 
         KernelPlugin plugin = KernelPluginFactory.CreateFromType<T>(pluginName, serviceProvider);
-        plugins.Add(plugin);
+        plugins.AddAsync(plugin);
         return plugin;
     }
 
@@ -292,7 +292,7 @@ public static class KernelExtensions
     public static KernelPlugin ImportPluginFromObject(this Kernel kernel, object target, string? pluginName = null)
     {
         KernelPlugin plugin = CreatePluginFromObject(kernel, target, pluginName);
-        kernel.Plugins.Add(plugin);
+        kernel.Plugins.AddAsync(plugin);
         return plugin;
     }
 
@@ -313,7 +313,7 @@ public static class KernelExtensions
         Verify.NotNull(plugins);
 
         KernelPlugin plugin = KernelPluginFactory.CreateFromObject(target, pluginName, serviceProvider?.GetService<ILoggerFactory>());
-        plugins.Add(plugin);
+        plugins.AddAsync(plugin);
         return plugin;
     }
 
@@ -364,7 +364,7 @@ public static class KernelExtensions
     public static KernelPlugin ImportPluginFromFunctions(this Kernel kernel, string pluginName, string? description = null, IEnumerable<KernelFunction>? functions = null)
     {
         KernelPlugin plugin = CreatePluginFromFunctions(kernel, pluginName, description, functions);
-        kernel.Plugins.Add(plugin);
+        kernel.Plugins.AddAsync(plugin);
         return plugin;
     }
 
@@ -395,7 +395,7 @@ public static class KernelExtensions
         Verify.NotNull(plugins);
 
         var plugin = new DefaultKernelPlugin(pluginName, description, functions);
-        plugins.Add(plugin);
+        plugins.AddAsync(plugin);
         return plugin;
     }
 
@@ -581,7 +581,7 @@ public static class KernelExtensions
         IPromptTemplateFactory? promptTemplateFactory = null)
     {
         KernelPlugin plugin = CreatePluginFromPromptDirectory(kernel, pluginDirectory, pluginName, promptTemplateFactory);
-        kernel.Plugins.Add(plugin);
+        kernel.Plugins.AddAsync(plugin);
         return plugin;
     }
 

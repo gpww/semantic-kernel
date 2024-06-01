@@ -21,6 +21,7 @@ public sealed class OpenAITextToAudioService : ITextToAudioService
     /// OpenAI text-to-audio client for HTTP operations.
     /// </summary>
     private readonly OpenAITextToAudioClient _client;
+    /// <inheritdoc/>
     public string ServiceName { get; set; }
 
     /// <summary>

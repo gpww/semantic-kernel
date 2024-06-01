@@ -83,23 +83,6 @@ public sealed class GoogleConnector : IWebSearchEngineConnector, IDisposable
 
         List<T>? returnValues = null;
         if (results.Items is not null)
-        return results.Items.Select(item => new WebPage { Name = item.Title, Url = item.Link, Snippet = item.Snippet });
-        // return results.Items.Select(item => item.Snippet);
-    }
-
-    public async Task<IEnumerable<string>> SearchAsync(string query, int count, int offset, CancellationToken cancellationToken)
-    {
-        var results = await this.SearchWebPagesAsync(query, count, offset, cancellationToken).ConfigureAwait(false);
-        return results.Select(item => item.Snippet);
-    }
-
-    /// <summary>
-    /// Disposes the resources used by the <see cref="GoogleConnector"/> instance.
-    /// </summary>
-    /// <param name="disposing">True to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
-    private void Dispose(bool disposing)
-    {
-        if (disposing)
         {
             if (typeof(T) == typeof(string))
             {
@@ -130,6 +113,12 @@ public sealed class GoogleConnector : IWebSearchEngineConnector, IDisposable
             returnValues is null ? [] :
             returnValues.Count <= count ? returnValues :
             returnValues.Take(count);
+    }
+
+    public async Task<IEnumerable<string>> SearchAsync(string query, int count, int offset, CancellationToken cancellationToken)
+    {
+        var results = await this.SearchAsync<WebPage>(query, count, offset, cancellationToken).ConfigureAwait(false);
+        return results.Select(item => item.Snippet);
     }
 
     /// <summary>

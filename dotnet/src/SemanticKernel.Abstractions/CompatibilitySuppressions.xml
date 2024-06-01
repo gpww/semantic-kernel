@@ -43,4 +43,25 @@
     <Right>lib/netstandard2.0/Microsoft.SemanticKernel.Abstractions.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
   </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0005</DiagnosticId>
+    <Target>M:Microsoft.SemanticKernel.KernelPlugin.GetModelServiceName(System.String)</Target>
+    <Left>lib/netstandard2.0/Microsoft.SemanticKernel.Abstractions.dll</Left>
+    <Right>lib/netstandard2.0/Microsoft.SemanticKernel.Abstractions.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0005</DiagnosticId>
+    <Target>M:Microsoft.SemanticKernel.KernelPlugin.SetModelServiceName(System.String,System.String)</Target>
+    <Left>lib/netstandard2.0/Microsoft.SemanticKernel.Abstractions.dll</Left>
+    <Right>lib/netstandard2.0/Microsoft.SemanticKernel.Abstractions.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0006</DiagnosticId>
+    <Target>P:Microsoft.SemanticKernel.Services.IAIService.ServiceName</Target>
+    <Left>lib/netstandard2.0/Microsoft.SemanticKernel.Abstractions.dll</Left>
+    <Right>lib/netstandard2.0/Microsoft.SemanticKernel.Abstractions.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
 </Suppressions>
