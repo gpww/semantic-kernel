@@ -19,9 +19,21 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\..\..\CSharp\Silver\Silver.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\TiktokenSharp\TiktokenSharp\TiktokenSharp.csproj" />
-    <ProjectReference Include="..\..\..\SemanticKernel.Abstractions\SemanticKernel.Abstractions.csproj" />
-    <ProjectReference Include="..\..\..\SemanticKernel.Core\SemanticKernel.Core.csproj" />
-    <ProjectReference Include="..\..\Connectors.OpenAI\Connectors.OpenAI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Azure.AI.OpenAI">
+      <HintPath>..\..\Connectors.OpenAI\bin\Release\net8.0\Azure.AI.OpenAI.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SemanticKernel.Abstractions">
+      <HintPath>..\..\..\SemanticKernel.Abstractions\bin\Release\net8.0\Microsoft.SemanticKernel.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SemanticKernel.Connectors.OpenAI">
+      <HintPath>..\..\Connectors.OpenAI\bin\Release\net8.0\Microsoft.SemanticKernel.Connectors.OpenAI.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SemanticKernel.Core">
+      <HintPath>..\..\..\SemanticKernel.Core\bin\Release\net8.0\Microsoft.SemanticKernel.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
