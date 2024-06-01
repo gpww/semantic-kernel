@@ -13,7 +13,7 @@ public static class ChatHistoryExtension
 
         foreach (var m in chatHistory)
         {
-            option.Messages.AddAsync(ClientCore.GetRequestMessage(new ChatRole(m.Role.Label), m.Content, m.AuthorName, null));
+            option.Messages.Add(ClientCore.GetRequestMessage(new ChatRole(m.Role.Label), m.Content, m.AuthorName, null));
         }
 
         return option.GetMessagesJson();

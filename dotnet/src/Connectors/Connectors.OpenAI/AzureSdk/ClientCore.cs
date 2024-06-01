@@ -454,8 +454,8 @@ internal abstract class ClientCore
             // to understand the tool call responses. Also add the result message to the caller's chat
             // history: if they don't want it, they can remove it, but this makes the data available,
             // including metadata like usage.
-            chatOptions.Messages.AddAsync(GetRequestMessage(resultChoice.Message));
-            await chat.AddAsync(result);
+            chatOptions.Messages.Add(GetRequestMessage(resultChoice.Message));
+            chat.Add(result);
 
             // We must send back a response for every tool call, regardless of whether we successfully executed it or not.
             // If we successfully execute it, we'll add the result. If we don't, we'll add an error.
@@ -568,7 +568,7 @@ internal abstract class ClientCore
 
                     // Add the tool response message to the chat options
                     result ??= errorMessage ?? string.Empty;
-                    chatOptions.Messages.AddAsync(new ChatRequestToolMessage(result, toolCall.Id));
+                    chatOptions.Messages.Add(new ChatRequestToolMessage(result, toolCall.Id));
 
                     // Add the tool response message to the chat history.
                     var message = new ChatMessageContent(role: AuthorRole.Tool, content: result, metadata: new Dictionary<string, object?> { { OpenAIChatMessageContent.ToolIdProperty, toolCall.Id } });
@@ -578,10 +578,10 @@ internal abstract class ClientCore
                         // Add an item of type FunctionResultContent to the ChatMessageContent.Items collection in addition to the function result stored as a string in the ChatMessageContent.Content property.  
                         // This will enable migration to the new function calling model and facilitate the deprecation of the current one in the future.
                         var functionName = FunctionName.Parse(functionCall.Name, OpenAIFunction.NameSeparator);
-                        message.Items.AddAsync(new FunctionResultContent(functionName.Name, functionName.PluginName, functionCall.Id, result));
+                        message.Items.Add(new FunctionResultContent(functionName.Name, functionName.PluginName, functionCall.Id, result));
                     }
 
-                    await chat.AddAsync(message);
+                    chat.Add(message);
                 }
             }
 
@@ -612,7 +612,7 @@ internal abstract class ClientCore
             if (chatOptions.ToolChoice == ChatCompletionsToolChoice.None)
             {
                 Debug.Assert(chatOptions.Tools.Count == 0);
-                chatOptions.Tools.AddAsync(s_nonInvocableFunctionTool);
+                chatOptions.Tools.Add(s_nonInvocableFunctionTool);
             }
 
             // Disable auto invocation if we've exceeded the allowed limit.
@@ -760,7 +760,7 @@ internal abstract class ClientCore
 
             // Add the original assistant message to the chatOptions; this is required for the service
             // to understand the tool call responses.
-            chatOptions.Messages.AddAsync(GetRequestMessage(streamedRole ?? default, content, streamedName, toolCalls));
+            chatOptions.Messages.Add(GetRequestMessage(streamedRole ?? default, content, streamedName, toolCalls));
             // Add the result message to the caller's chat history
             var newChatMessageContent = new OpenAIChatMessageContent(streamedRole ?? default, content, this.DeploymentOrModelName, toolCalls, metadata)
             {
@@ -769,10 +769,10 @@ internal abstract class ClientCore
             // Add the tool call messages to the new chat message content for diagnostics purposes.
             foreach (var functionCall in functionCallContents ?? [])
             {
-                newChatMessageContent.Items.AddAsync(functionCall);
+                newChatMessageContent.Items.Add(functionCall);
             }
 
-            await chat.AddAsync(newChatMessageContent);
+            chat.Add(newChatMessageContent);
 
             // Respond to each tooling request.
             for (int toolCallIndex = 0; toolCallIndex < toolCalls.Length; toolCallIndex++)
@@ -890,8 +890,8 @@ internal abstract class ClientCore
 
                     // Add the tool response message to both the chat options and to the chat history.
                     result ??= errorMessage ?? string.Empty;
-                    chatOptions.Messages.AddAsync(new ChatRequestToolMessage(result, tool.Id));
-                    await chat.AddMessageAsync(AuthorRole.Tool, result, metadata: new Dictionary<string, object?> { { OpenAIChatMessageContent.ToolIdProperty, tool.Id } });
+                    chatOptions.Messages.Add(new ChatRequestToolMessage(result, tool.Id));
+                    chat.AddMessage(AuthorRole.Tool, result, metadata: new Dictionary<string, object?> { { OpenAIChatMessageContent.ToolIdProperty, tool.Id } });
                 }
             }
 
@@ -922,7 +922,7 @@ internal abstract class ClientCore
             if (chatOptions.ToolChoice == ChatCompletionsToolChoice.None)
             {
                 Debug.Assert(chatOptions.Tools.Count == 0);
-                chatOptions.Tools.AddAsync(s_nonInvocableFunctionTool);
+                chatOptions.Tools.Add(s_nonInvocableFunctionTool);
             }
 
             // Disable auto invocation if we've exceeded the allowed limit.
@@ -960,7 +960,7 @@ internal abstract class ClientCore
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         OpenAIPromptExecutionSettings chatSettings = OpenAIPromptExecutionSettings.FromExecutionSettings(executionSettings);
-        ChatHistory chat = await CreateNewChatAsync(prompt, chatSettings);
+        ChatHistory chat = CreateNewChat(prompt, chatSettings);
 
         await foreach (var chatUpdate in this.GetStreamingChatMessageContentsAsync(chat, executionSettings, kernel, cancellationToken).ConfigureAwait(false))
         {
@@ -976,7 +976,7 @@ internal abstract class ClientCore
     {
         OpenAIPromptExecutionSettings chatSettings = OpenAIPromptExecutionSettings.FromExecutionSettings(executionSettings);
 
-        ChatHistory chat = await CreateNewChatAsync(text, chatSettings);
+        ChatHistory chat = CreateNewChat(text, chatSettings);
         return (await this.GetChatMessageContentsAsync(chat, chatSettings, kernel, cancellationToken).ConfigureAwait(false))
             .Select(chat => new TextContent(chat.Content, chat.ModelId, chat.Content, Encoding.UTF8, chat.Metadata))
             .ToList();
@@ -1019,7 +1019,7 @@ internal abstract class ClientCore
     /// <param name="text">Optional chat instructions for the AI service</param>
     /// <param name="executionSettings">Execution settings</param>
     /// <returns>Chat object</returns>
-    private static async Task<ChatHistory> CreateNewChatAsync(string? text = null, OpenAIPromptExecutionSettings? executionSettings = null)
+    private static ChatHistory CreateNewChat(string? text = null, OpenAIPromptExecutionSettings? executionSettings = null)
     {
         var chat = new ChatHistory();
 
@@ -1028,13 +1028,13 @@ internal abstract class ClientCore
 
         if (!string.IsNullOrWhiteSpace(executionSettings?.ChatSystemPrompt))
         {
-            await chat.AddSystemMessageAsync(executionSettings!.ChatSystemPrompt!);
+            chat.AddSystemMessage(executionSettings!.ChatSystemPrompt!);
             textRole = AuthorRole.User;
         }
 
         if (!string.IsNullOrWhiteSpace(text))
         {
-            await chat.AddMessageAsync(textRole, text!);
+            chat.AddMessage(textRole, text!);
         }
 
         return chat;
@@ -1075,7 +1075,7 @@ internal abstract class ClientCore
         {
             foreach (var s in executionSettings.StopSequences)
             {
-                options.StopSequences.AddAsync(s);
+                options.StopSequences.Add(s);
             }
         }
 
@@ -1169,7 +1169,7 @@ internal abstract class ClientCore
         {
             foreach (var s in executionSettings.StopSequences)
             {
-                options.StopSequences.AddAsync(s);
+                options.StopSequences.Add(s);
             }
         }
 
@@ -1204,7 +1204,7 @@ internal abstract class ClientCore
             {
                 foreach (ChatCompletionsFunctionToolCall tool in tools)
                 {
-                    msg.ToolCalls.AddAsync(tool);
+                    msg.ToolCalls.Add(tool);
                 }
             }
             return msg;
@@ -1331,7 +1331,7 @@ internal abstract class ClientCore
 
                 var argument = JsonSerializer.Serialize(callRequest.Arguments);
 
-                asstMessage.ToolCalls.AddAsync(new ChatCompletionsFunctionToolCall(callRequest.Id, FunctionName.ToFullyQualifiedName(callRequest.FunctionName, callRequest.PluginName, OpenAIFunction.NameSeparator), argument ?? string.Empty));
+                asstMessage.ToolCalls.Add(new ChatCompletionsFunctionToolCall(callRequest.Id, FunctionName.ToFullyQualifiedName(callRequest.FunctionName, callRequest.PluginName, OpenAIFunction.NameSeparator), argument ?? string.Empty));
             }
 
             return [asstMessage];
@@ -1353,7 +1353,7 @@ internal abstract class ClientCore
             {
                 foreach (ChatCompletionsToolCall tool in tools)
                 {
-                    msg.ToolCalls.AddAsync(tool);
+                    msg.ToolCalls.Add(tool);
                 }
             }
 
@@ -1378,7 +1378,7 @@ internal abstract class ClientCore
             if (toolCall is ChatCompletionsFunctionToolCall functionToolCall)
             {
                 var functionCallContent = this.GetFunctionCallContent(functionToolCall);
-                message.Items.AddAsync(functionCallContent);
+                message.Items.Add(functionCallContent);
             }
         }
 
