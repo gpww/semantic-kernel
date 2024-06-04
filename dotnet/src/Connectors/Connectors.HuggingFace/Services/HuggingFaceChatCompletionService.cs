@@ -21,6 +21,7 @@ public sealed class HuggingFaceChatCompletionService : IChatCompletionService
 {
     private Dictionary<string, object?> AttributesInternal { get; } = [];
     private HuggingFaceMessageApiClient Client { get; }
+    public string ServiceName { get; set; }
 
     /// <inheritdoc />
     public IReadOnlyDictionary<string, object?> Attributes => this.AttributesInternal;

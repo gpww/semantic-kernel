@@ -25,7 +25,7 @@ public partial class ChatHistory
                 return null;
             }
 
-            return this._messages.First(m => m.Role == AuthorRole.System);
+            return this._messages.FirstOrDefault(m => m.Role == AuthorRole.System);
         }
     }
 

@@ -1342,14 +1342,15 @@ internal abstract class ClientCore
 
     private static ChatMessageImageContentItem GetImageContentItem(ImageContent imageContent)
     {
+        var uri = imageContent.AbsoluteUri;
+        if (string.IsNullOrEmpty(uri) == false)
+        {
+            return new ChatMessageImageContentItem(uri);
+        }
+
         if (imageContent.Data is { IsEmpty: false } data)
         {
             return new ChatMessageImageContentItem(BinaryData.FromBytes(data), imageContent.MimeType);
-        }
-
-        if (imageContent.Uri is not null)
-        {
-            return new ChatMessageImageContentItem(imageContent.Uri);
         }
 
         throw new ArgumentException($"{nameof(ImageContent)} must have either Data or a Uri.");

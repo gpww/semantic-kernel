@@ -42,6 +42,7 @@ public sealed class MistralAIChatCompletionService : IChatCompletionService
 
     /// <inheritdoc/>
     public IReadOnlyDictionary<string, object?> Attributes => this.AttributesInternal;
+    public string ServiceName { get; set; }
 
     /// <inheritdoc/>
     public Task<IReadOnlyList<ChatMessageContent>> GetChatMessageContentsAsync(ChatHistory chatHistory, PromptExecutionSettings? executionSettings = null, Kernel? kernel = null, CancellationToken cancellationToken = default)

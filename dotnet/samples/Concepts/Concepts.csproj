@@ -43,6 +43,7 @@
   <Import Project="$(RepoRoot)/dotnet/src/InternalUtilities/samples/SamplesInternalUtilities.props" />
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\CSharp\Silver\Silver.csproj" />
     <ProjectReference Include="..\..\src\Connectors\Connectors.MistralAI\Connectors.MistralAI.csproj" />
     <ProjectReference Include="..\..\src\Agents\Abstractions\Agents.Abstractions.csproj" />
     <ProjectReference Include="..\..\src\Agents\Core\Agents.Core.csproj" />
@@ -101,5 +102,11 @@
     <EmbeddedResource Include="Resources\*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Search\BingAndGooglePlugins - 复制.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Search\BingAndGooglePlugins - 复制.cs" />
   </ItemGroup>
 </Project>

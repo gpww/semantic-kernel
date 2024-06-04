@@ -20,6 +20,7 @@ public sealed class GoogleAITextEmbeddingGenerationService : ITextEmbeddingGener
 {
     private readonly Dictionary<string, object?> _attributesInternal = [];
     private readonly GoogleAIEmbeddingClient _embeddingClient;
+    public string ServiceName { get; set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GoogleAITextEmbeddingGenerationService"/> class.

@@ -141,13 +141,13 @@ public sealed class Legacy_AgentTools(ITestOutputHelper output) : BaseTest(outpu
 
         async Task InvokeAgentAsync(IAgent agent, string question)
         {
-            //await foreach (var message in agent.InvokeAsync(question, null, fileIds))
-            //{
-            //    string content = message.Content;
-            //    foreach (var annotation in message.Annotations)
-            //    {
-            //        content = content.Replace(annotation.Label, string.Empty, StringComparison.Ordinal);
-            //    }
+            await foreach (var message in agent.InvokeAsync(question, null, fileIds))
+            {
+                string content = message.Content;
+                foreach (var annotation in message.Annotations)
+                {
+                    content = content.Replace(annotation.Label, string.Empty, StringComparison.Ordinal);
+                }
 
                 Console.WriteLine($"# {message.Role}: {content}");
 

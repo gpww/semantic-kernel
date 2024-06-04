@@ -20,6 +20,7 @@ public sealed class VertexAIGeminiChatCompletionService : IChatCompletionService
 {
     private readonly Dictionary<string, object?> _attributesInternal = [];
     private readonly GeminiChatCompletionClient _chatCompletionClient;
+    public string ServiceName { get; set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="VertexAIGeminiChatCompletionService"/> class.

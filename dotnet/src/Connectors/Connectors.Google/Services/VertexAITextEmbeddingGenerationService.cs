@@ -20,6 +20,7 @@ public sealed class VertexAITextEmbeddingGenerationService : ITextEmbeddingGener
 {
     private readonly Dictionary<string, object?> _attributesInternal = [];
     private readonly VertexAIEmbeddingClient _embeddingClient;
+    public string ServiceName { get; set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="VertexAITextEmbeddingGenerationService"/> class.

@@ -9,37 +9,18 @@ namespace Functions;
 // This example shows how to use kernel arguments when invoking functions.
 public class Arguments(ITestOutputHelper output) : BaseTest(output)
 {
-    public Example03_Arguments(ITestOutputHelper output) : base(output)
-    {
-    }
-
     [Fact]
     public async Task RunAsync()
     {
         Console.WriteLine("======== Arguments ========");
 
-        var httpClient = WebHelper.BuildHttpClient();
-        // Create kernel.
-        IKernelBuilder builder = Kernel.CreateBuilder();
-        builder.AddOpenAIChatCompletion("gpt-3.5-turbo", TestConfiguration.OpenAI.ApiKey, serviceId: serviceKey1, httpClient: httpClient);
-        builder.Services.AddSingleton<IAIServiceSelector>(new AIServiceSelector()); // Use the custom AI service selector to select the GPT model
-        builder.AddOpenAIChatCompletion("gpt-4", TestConfiguration.OpenAI.ApiKey, serviceId: serviceKey2, httpClient: httpClient);
-        //builder.Services.AddLogging(services => services.AddConsole().SetMinimumLevel(LogLevel.Trace));
-        //builder.Services.AddLogging(services => services.AddSerilog().SetMinimumLevel(LogLevel.Trace));
-        Kernel kernel = builder.Build();
-
-        //Kernel kernel = new();
-        var textPlugin = kernel.ImportPluginFromType<StaticTextPlugin>("StaticTextPlugin");
-
-        kernel.ImportPluginFromType<TimePlugin>(TimePlugin.PluginName);
-
-        var customType = new CustomType() { Name = "CustomType" };
+        Kernel kernel = new();
+        var textPlugin = kernel.ImportPluginFromType<StaticTextPlugin>();
 
         var arguments = new KernelArguments()
         {
             ["input"] = "Today is: ",
-            ["day"] = DateTimeOffset.Now.ToString("dddd", CultureInfo.CurrentCulture),
-            ["input2"] = customType
+            ["day"] = DateTimeOffset.Now.ToString("dddd", CultureInfo.CurrentCulture)
         };
 
         // ** Different ways of executing functions with arguments **
@@ -48,22 +29,9 @@ public class Arguments(ITestOutputHelper output) : BaseTest(output)
         string? resultValue = await kernel.InvokeAsync<string>(textPlugin["AppendDay"], arguments);
         Console.WriteLine($"string -> {resultValue}");
 
-        // Define hooks
-        void MyRenderingHandler(object? sender, PromptRenderingEventArgs e)
-        {
-            Console.WriteLine($"{e.Function.Name} : Prompt Rendering Handler - Triggered");
-            //e.Arguments["style"] = "Seinfeld";
-        }
-
-        void MyRenderedHandler(object? sender, PromptRenderedEventArgs e)
-        {
-            Console.WriteLine("RenderedPrompt:");
-            Console.WriteLine(StringHelper.LineSeparator);
-            Console.WriteLine(e.RenderedPrompt);
-            Console.WriteLine(StringHelper.LineSeparator);
-        }
-        kernel.PromptRendered += MyRenderedHandler;
-        kernel.PromptRendering += MyRenderingHandler;
+        // If you need to access the result metadata, you can use the non-generic version to get the FunctionResult
+        FunctionResult functionResult = await kernel.InvokeAsync(textPlugin["AppendDay"], arguments);
+        var metadata = functionResult.Metadata;
 
         // Specify the type from the FunctionResult
         Console.WriteLine($"FunctionResult.GetValue<string>() -> {functionResult.GetValue<string>()}");

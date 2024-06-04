@@ -42,6 +42,7 @@ public sealed class MistralAITextEmbeddingGenerationService : ITextEmbeddingGene
 
     /// <inheritdoc/>
     public IReadOnlyDictionary<string, object?> Attributes => this.AttributesInternal;
+    public string ServiceName { get; set; }
 
     /// <inheritdoc/>
     public Task<IList<ReadOnlyMemory<float>>> GenerateEmbeddingsAsync(IList<string> data, Kernel? kernel = null, CancellationToken cancellationToken = default)

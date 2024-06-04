@@ -16,6 +16,7 @@ public sealed class ImageContent : KernelContent
     /// </summary>
     public Uri? Uri { get; set; }
     private readonly string _absoluteUri;
+    public string AbsoluteUri => this.ToString();
 
     /// <summary>
     /// The image data.
