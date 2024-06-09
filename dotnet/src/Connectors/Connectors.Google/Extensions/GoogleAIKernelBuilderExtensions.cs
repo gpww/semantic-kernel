@@ -38,12 +38,16 @@ public static class GoogleAIKernelBuilderExtensions
         Verify.NotNull(apiKey);
 
         builder.Services.AddKeyedSingleton<IChatCompletionService>(serviceId, (serviceProvider, _) =>
-            new GoogleAIGeminiChatCompletionService(
+        {
+            var gs = new GoogleAIGeminiChatCompletionService(
                 modelId: modelId,
                 apiKey: apiKey,
                 apiVersion: apiVersion,
                 httpClient: HttpClientProvider.GetHttpClient(httpClient, serviceProvider),
-                loggerFactory: serviceProvider.GetService<ILoggerFactory>()));
+                loggerFactory: serviceProvider.GetService<ILoggerFactory>());
+            gs.ServiceName = serviceId;
+            return gs;
+        });
         return builder;
     }
 
@@ -70,12 +74,16 @@ public static class GoogleAIKernelBuilderExtensions
         Verify.NotNull(apiKey);
 
         builder.Services.AddKeyedSingleton<ITextEmbeddingGenerationService>(serviceId, (serviceProvider, _) =>
-            new GoogleAITextEmbeddingGenerationService(
-                modelId: modelId,
-                apiKey: apiKey,
-                apiVersion: apiVersion,
-                httpClient: HttpClientProvider.GetHttpClient(httpClient, serviceProvider),
-                loggerFactory: serviceProvider.GetService<ILoggerFactory>()));
+            {
+                var gs = new GoogleAITextEmbeddingGenerationService(
+                    modelId: modelId,
+                    apiKey: apiKey,
+                    apiVersion: apiVersion,
+                    httpClient: HttpClientProvider.GetHttpClient(httpClient, serviceProvider),
+                    loggerFactory: serviceProvider.GetService<ILoggerFactory>());
+                gs.ServiceName = serviceId;
+                return gs;
+            });
         return builder;
     }
 }

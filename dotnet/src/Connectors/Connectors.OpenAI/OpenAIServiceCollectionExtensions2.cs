@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -39,7 +38,7 @@ public static class OpenAIServiceCollectionExtensions
         {
             httpClient = HttpClientProvider.GetHttpClient(httpClient, serviceProvider);
             var options = ClientCore.GetOpenAIClientOptions(httpClient);
-            var client = new CustomClient.OpenAIClient2(apiKey, options, endPoint);
+            var client = new OpenAIClient2(apiKey, options, endPoint);
 
             var service = new OpenAIChatCompletionService(modelId, client, serviceProvider.GetService<ILoggerFactory>());
             service.ServiceName = serviceKey;
@@ -74,7 +73,6 @@ public static class OpenAIServiceCollectionExtensions
     /// <param name="endPoint">Public OpenAI Endpoint, default = https://api.openai.com/v1</param>
     /// <param name="httpClient">The HttpClient to use with this service.</param>
     /// <returns>The same instance as <paramref name="builder"/>.</returns>
-    [Experimental("SKEXP0011")]
     public static IKernelBuilder AddOneAPITextEmbedding(
         this IKernelBuilder builder,
         string serviceKey,
@@ -91,7 +89,7 @@ public static class OpenAIServiceCollectionExtensions
         {
             httpClient = HttpClientProvider.GetHttpClient(httpClient, serviceProvider);
             var options = ClientCore.GetOpenAIClientOptions(httpClient);
-            var client = new CustomClient.OpenAIClient2(apiKey, options, endPoint);
+            var client = new OpenAIClient2(apiKey, options, endPoint);
 
             var service = new OpenAITextEmbeddingGenerationService(modelId, client, serviceProvider.GetService<ILoggerFactory>());
             service.ServiceName = serviceKey;

@@ -9,7 +9,7 @@ namespace Connectors.AI;
 
 public abstract class CustomChatCompletion : ITextGenerationService, IChatCompletionService
 {
-    protected CustomChatCompletion(string serviceName, string modelId)
+    protected CustomChatCompletion(string serviceName)
     {
         this.ServiceName = serviceName;
     }

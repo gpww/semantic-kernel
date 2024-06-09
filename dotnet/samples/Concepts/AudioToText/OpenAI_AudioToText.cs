@@ -4,6 +4,7 @@ using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.AudioToText;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Resources;
+using Silver;
 
 namespace AudioToText;
 
@@ -12,17 +13,20 @@ namespace AudioToText;
 /// </summary>
 public sealed class OpenAI_AudioToText(ITestOutputHelper output) : BaseTest(output)
 {
-    private const string AudioToTextModel = "whisper-1";
+    //private const string AudioToTextModel = "whisper-1";
     private const string AudioFilename = "test_audio.wav";
 
-    [Fact(Skip = "Setup and run TextToAudioAsync before running this test.")]
+    [Fact]
+    //[Fact(Skip = "Setup and run TextToAudioAsync before running this test.")]
     public async Task AudioToTextAsync()
     {
+        var httpClient = Concepts.MyUtilities.BuildHttpClient("https://localhost:5003", null, 60);
+
         // Create a kernel with OpenAI audio to text service
         var kernel = Kernel.CreateBuilder()
             .AddOpenAIAudioToText(
                 modelId: AudioToTextModel,
-                apiKey: TestConfiguration.OpenAI.ApiKey)
+                apiKey: "sk-w07M88L/hI0QzrjRPONymznrnot5mRFymX5Hos1uSSw=", httpClient: httpClient)
             .Build();
 
         var audioToTextService = kernel.GetRequiredService<IAudioToTextService>();

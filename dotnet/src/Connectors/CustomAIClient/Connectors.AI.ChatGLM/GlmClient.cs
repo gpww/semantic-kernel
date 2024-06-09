@@ -98,4 +98,11 @@ public class GlmClient : CustomAIClient
     {
         throw new NotImplementedException();
     }
+
+#pragma warning disable SKEXP0001 // 类型仅用于评估，在将来的更新中可能会被更改或删除。取消此诊断以继续。
+    public override Task<TextContent> GetTextContentsAsync(AudioContent content, PromptExecutionSettings? executionSettings = null, Kernel? kernel = null, CancellationToken cancellationToken = default)
+#pragma warning restore SKEXP0001 // 类型仅用于评估，在将来的更新中可能会被更改或删除。取消此诊断以继续。
+    {
+        throw new NotImplementedException();
+    }
 }
