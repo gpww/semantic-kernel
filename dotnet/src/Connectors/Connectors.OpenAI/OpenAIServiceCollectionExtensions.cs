@@ -986,11 +986,15 @@ public static partial class OpenAIServiceCollectionExtensions
         Verify.NotNullOrWhiteSpace(apiKey);
 
         Func<IServiceProvider, object?, OpenAIChatCompletionService> factory = (serviceProvider, _) =>
-            new(modelId,
+        {
+            var service = new OpenAIChatCompletionService(modelId,
                 apiKey,
                 orgId,
                 HttpClientProvider.GetHttpClient(httpClient, serviceProvider),
                 serviceProvider.GetService<ILoggerFactory>());
+            service.ServiceName = serviceId;
+            return service;
+        };
 
         builder.Services.AddKeyedSingleton<IChatCompletionService>(serviceId, factory);
         builder.Services.AddKeyedSingleton<ITextGenerationService>(serviceId, factory);
