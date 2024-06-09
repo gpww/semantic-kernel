@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Connectors.AI.ClientBase\Connectors.AI.CustomClientBase.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="Microsoft.SemanticKernel.Abstractions">
       <HintPath>..\..\..\SemanticKernel.Abstractions\bin\Release\net8.0\Microsoft.SemanticKernel.Abstractions.dll</HintPath>
     </Reference>

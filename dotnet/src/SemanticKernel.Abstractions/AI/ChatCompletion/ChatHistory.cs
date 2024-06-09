@@ -162,7 +162,7 @@ public partial class ChatHistory : IList<ChatMessageContent>, IReadOnlyList<Chat
         }
     }
 
-    public virtual ChatMessageContent Last => this._messages.Last();
+    public virtual ChatMessageContent Last => this.Count > 0 ? this._messages.Last() : null;
 
     /// <summary>Determines whether a message is in the history.</summary>
     /// <param name="item">The message to locate.</param>
