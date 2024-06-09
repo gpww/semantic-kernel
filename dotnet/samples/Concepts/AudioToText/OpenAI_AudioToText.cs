@@ -13,7 +13,7 @@ namespace AudioToText;
 /// </summary>
 public sealed class OpenAI_AudioToText(ITestOutputHelper output) : BaseTest(output)
 {
-    //private const string AudioToTextModel = "whisper-1";
+    private const string AudioToTextModel = "whisper-1";
     private const string AudioFilename = "test_audio.wav";
 
     [Fact]
