@@ -815,7 +815,7 @@ internal abstract class ClientCore
                     continue;
                 }
 
-                functionArgs.AddExtensionData(executionSettings);
+                functionArgs.AddExtensionData(executionSettings);//Agent ProcessTextMessageAsync 函数中把 KernelArguments 注入到了 ExtensionData 中
 
                 // Now, invoke the function, and add the resulting tool call message to the chat options.
                 FunctionResult functionResult = new(function) { Culture = kernel.Culture };

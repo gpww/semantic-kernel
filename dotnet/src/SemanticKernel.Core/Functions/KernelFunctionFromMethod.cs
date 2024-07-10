@@ -155,7 +155,7 @@ internal sealed partial class KernelFunctionFromMethod : KernelFunction
     {
         Verify.NotNullOrWhiteSpace(pluginName, nameof(pluginName));
 
-        return new KernelFunctionFromMethod(
+        var clone = new KernelFunctionFromMethod(
             this._function,
             this.Name,
             pluginName,
@@ -163,6 +163,10 @@ internal sealed partial class KernelFunctionFromMethod : KernelFunction
             this.Metadata.Parameters,
             this.Metadata.ReturnParameter,
             this.Metadata.AdditionalProperties);
+
+        clone.Metadata.FunctionCallAvailable = this.Metadata.FunctionCallAvailable;
+
+        return clone;
     }
 
     /// <summary>Delegate used to invoke the underlying delegate.</summary>

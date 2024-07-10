@@ -86,9 +86,36 @@ public sealed class KernelFunctionAttribute : Attribute
 
     /// <summary>Initializes the attribute.</summary>
     /// <param name="name">The name to use for the function.</param>
-    public KernelFunctionAttribute(string? name) => this.Name = name;
+    public KernelFunctionAttribute(string? name)
+    {
+        this.Name = name;
+        this.IsFunctionCallAvailable = false;
+    }
+    /// <summary>
+    /// Initializes the attribute.
+    /// </summary>
+    /// <param name="isFunctionCallAvailable">指示是否发送到服务器端作为 FunctionCall候选</param>
+    public KernelFunctionAttribute(bool isFunctionCallAvailable)
+    {
+        this.IsFunctionCallAvailable = isFunctionCallAvailable;
+    }
+    /// <summary>
+    /// Initializes the attribute.
+    /// </summary>
+    /// <param name="name">The name to use for the function.</param>
+    /// <param name="isFunctionCallAvailable">指示是否发送到服务器端作为 FunctionCall候选</param>
+    public KernelFunctionAttribute(string? name, bool isFunctionCallAvailable)
+    {
+        this.Name = name;
+        this.IsFunctionCallAvailable = isFunctionCallAvailable;
+    }
 
     /// <summary>Gets the function's name.</summary>
     /// <remarks>If null, a name will based on the name of the attributed method will be used.</remarks>
     public string? Name { get; }
+
+    /// <summary>
+    /// 指示是否发送到服务器端作为 FunctionCall候选
+    /// </summary>
+    public bool IsFunctionCallAvailable { get; }
 }

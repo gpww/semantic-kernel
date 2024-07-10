@@ -60,9 +60,12 @@ public static partial class KernelPluginFactory
         var functions = new List<KernelFunction>();
         foreach (MethodInfo method in methods)
         {
-            if (method.GetCustomAttribute<KernelFunctionAttribute>() is not null)
+            var kernelFunctionAttribute = method.GetCustomAttribute<KernelFunctionAttribute>();
+            if (kernelFunctionAttribute is not null && kernelFunctionAttribute.IsFunctionCallAvailable)
             {
-                functions.Add(KernelFunctionFactory.CreateFromMethod(method, target, loggerFactory: loggerFactory));
+                var f = KernelFunctionFactory.CreateFromMethod(method, target, loggerFactory: loggerFactory);
+                functions.Add(f);
+                f.Metadata.FunctionCallAvailable = true;
             }
         }
         if (functions.Count == 0)
