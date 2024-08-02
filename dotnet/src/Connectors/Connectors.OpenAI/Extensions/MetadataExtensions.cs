@@ -10,10 +10,13 @@ public static class MetadataExtensions
 {
     public static IReadOnlyList<ChatTokenLogProbabilityInfo> GetChatTokenLogProbabilities(this IReadOnlyDictionary<string, object?> metadata)
     {
-        var logProbabilityInfo = metadata["LogProbabilityInfo"] as ChatChoiceLogProbabilityInfo;
-        if (logProbabilityInfo?.TokenLogProbabilityResults?.Count > 0)
+        if (metadata != null)
         {
-            return logProbabilityInfo.TokenLogProbabilityResults.First().TopLogProbabilityEntries;
+            var logProbabilityInfo = metadata["LogProbabilityInfo"] as ChatChoiceLogProbabilityInfo;
+            if (logProbabilityInfo?.TokenLogProbabilityResults?.Count > 0)
+            {
+                return logProbabilityInfo.TokenLogProbabilityResults.First().TopLogProbabilityEntries;
+            }
         }
 
         return Array.Empty<ChatTokenLogProbabilityInfo>();

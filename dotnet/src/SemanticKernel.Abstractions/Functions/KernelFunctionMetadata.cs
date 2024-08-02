@@ -65,7 +65,7 @@ public sealed class KernelFunctionMetadata
     }
 
     /// <summary>Gets the name of the plugin containing the function.</summary>
-    public string? PluginName { get; init; }
+    public string? PluginName { get; set; }
 
     /// <summary>Gets a description of the function, suitable for use in describing the purpose to a model.</summary>
     [AllowNull]

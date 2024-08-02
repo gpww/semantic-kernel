@@ -79,15 +79,16 @@ public static class KernelPluginExtensions
 
     /// <summary>Gets a collection of <see cref="KernelFunctionMetadata"/> instances, one for every function in every plugin in the plugins collection.</summary>
     /// <param name="plugins">The plugins collection.</param>
+    /// <param name="onlyFunctionCallAvailable">是否只返回FunctionCallAvailable的插件和函数</param>
     /// <returns>A list of metadata over every function in the plugins collection</returns>
-    public static IList<KernelFunctionMetadata> GetFunctionsMetadata(this IEnumerable<KernelPlugin> plugins)
+    public static IList<KernelFunctionMetadata> GetFunctionsMetadata(this IEnumerable<KernelPlugin> plugins, bool onlyFunctionCallAvailable = true)
     {
         Verify.NotNull(plugins);
 
         List<KernelFunctionMetadata> metadata = new();
-        foreach (KernelPlugin plugin in plugins.Where(p => p.FunctionCallAvailable))
+        foreach (KernelPlugin plugin in plugins.Where(p => !onlyFunctionCallAvailable || p.FunctionCallAvailable))
         {
-            metadata.AddRange(plugin.GetFunctionsMetadata().Where(f => f.FunctionCallAvailable));
+            metadata.AddRange(plugin.GetFunctionsMetadata().Where(f => !onlyFunctionCallAvailable || f.FunctionCallAvailable));
         }
 
         return metadata;

@@ -36,7 +36,7 @@ internal static class KernelFunctionHelpers
         string nameDelimiter,
         CancellationToken cancellationToken)
     {
-        foreach (var function in kernel.Plugins.GetFunctionsMetadata())
+        foreach (var function in kernel.Plugins.GetFunctionsMetadata(false))
         {
             RegisterFunctionAsHelper(kernel, executionContext, handlebarsInstance, function, allowDangerouslySetContent || promptConfig.AllowDangerouslySetContent, nameDelimiter, cancellationToken);
         }

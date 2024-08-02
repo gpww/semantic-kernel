@@ -12,6 +12,7 @@ public partial class DefaultKernelPlugin
         Verify.NotNull(function, nameof(function));
         this._functions.Add(funcName ?? function.Name, function);
         function.Metadata.FunctionCallAvailable = functionCallAvailable;
+        function.Metadata.PluginName = this.Name;
     }
 
     public override bool SetModelServiceName(string functionName, string modelServiceName)
