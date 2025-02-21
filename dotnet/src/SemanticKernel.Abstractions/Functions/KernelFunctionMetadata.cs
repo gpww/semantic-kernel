@@ -72,7 +72,7 @@ public sealed class KernelFunctionMetadata
     public string Description
     {
         get => this._description;
-        init => this._description = value ?? string.Empty;
+        set => this._description = value ?? string.Empty;
     }
 
     /// <summary>

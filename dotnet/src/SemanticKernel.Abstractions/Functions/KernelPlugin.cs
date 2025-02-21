@@ -38,14 +38,7 @@ public abstract partial class KernelPlugin : IEnumerable<KernelFunction>
     public string Name { get; }
 
     /// <summary>Gets a description of the plugin.</summary>
-    public string Description { get; }
-
-    /// <summary>
-    /// 是否发送到服务器端作为 FunctionCall候选
-    /// plugin中这个属性默认为 false，主要提供给Kernel用，不发送OpenAI服务端
-    /// Function 中的 FunctionCallAvailable 默认为 false
-    /// </summary>
-    public bool FunctionCallAvailable { get; set; } = false;
+    public string Description { get; set; }
 
     /// <summary>Gets the function in the plugin with the specified name.</summary>
     /// <param name="functionName">The name of the function.</param>
@@ -112,10 +105,5 @@ public abstract partial class KernelPlugin : IEnumerable<KernelFunction>
         public string Description => this._plugin.Description;
 
         public KernelFunction[] Functions => [.. this._plugin.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase)];
-    }
-
-    public override string ToString()
-    {
-        return string.Format("{0}: {1}", this.Name, this.Description);
     }
 }

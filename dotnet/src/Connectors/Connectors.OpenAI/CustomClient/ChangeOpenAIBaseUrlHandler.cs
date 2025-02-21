@@ -28,6 +28,7 @@ public class ChangeOpenAIBaseUrlHandler : HttpClientHandler
     {
         this._newBaseUrl = CheckEndPoint(newBaseUrl);
     }
+    /// <inheritdoc/>
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         // 修改请求的URL

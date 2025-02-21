@@ -60,8 +60,17 @@ public static class ChatCompletionServiceExtensions
         PromptExecutionSettings? executionSettings = null,
         Kernel? kernel = null,
         CancellationToken cancellationToken = default)
-        => (await chatCompletionService.GetChatMessageContentsAsync(prompt, executionSettings, kernel, cancellationToken).ConfigureAwait(false))
-            .Single();
+    {
+        try
+        {
+            var chatMessageContents = await chatCompletionService.GetChatMessageContentsAsync(prompt, executionSettings, kernel, cancellationToken).ConfigureAwait(false);
+            return chatMessageContents.Single();
+        }
+        catch (Exception e)
+        {
+            return new ChatMessageContent(AuthorRole.Assistant, e.Message);
+        }
+    }
 
     /// <summary>
     /// Get a single chat message content for the chat history and settings provided.

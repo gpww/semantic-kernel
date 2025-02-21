@@ -14,7 +14,8 @@ namespace TextToAudio;
 /// </summary>
 public sealed class OpenAI_TextToAudio(ITestOutputHelper output) : BaseTest(output)
 {
-    private const string TextToAudioModel = "tts-1-hd";
+    private const string TextToAudioModel = "tts-1";
+    //private const string TextToAudioModel = "tts-1-hd";
 
     //[Fact(Skip = "Uncomment the line to write the audio file output before running this test.")]
     [Fact]
@@ -31,7 +32,7 @@ public sealed class OpenAI_TextToAudio(ITestOutputHelper output) : BaseTest(outp
 
         var textToAudioService = kernel.GetRequiredService<ITextToAudioService>();
 
-        string sampleText = "你好，我叫Jhon。我是一名软件工程师。我正在进行一个将文本转换为音频的项目。";
+        string sampleText = "这篇文章探讨了如何利用 Google 的 AI 工具，轻松制作个性化的英文播客，以提升英语听力和学习效果。原文大约有一千字，阅读时间大约需要四到五分钟。";
 
         // Set execution settings (optional)
         OpenAITextToAudioExecutionSettings executionSettings = new()

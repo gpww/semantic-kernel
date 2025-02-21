@@ -13,7 +13,7 @@ public sealed partial class WebPage : IRelevantContent
     [JsonPropertyName("Html")]
     public string Html { get; set; } = string.Empty;
 
-    public double Relevance { get; set; } = 0;
+    public float Relevance { get; set; } = 0;
 
     public override string ToString()
     {

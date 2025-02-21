@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!-- https://learn.microsoft.com/en-us/dotnet/fundamentals/package-validation/diagnostic-ids -->
+<!-- https://learn.microsoft.com/dotnet/fundamentals/package-validation/diagnostic-ids -->
 <Suppressions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
@@ -31,7 +31,28 @@
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:Microsoft.SemanticKernel.KernelFunctionMetadata.set_Description(System.String)</Target>
+    <Left>lib/netstandard2.0/Microsoft.SemanticKernel.Abstractions.dll</Left>
+    <Right>lib/netstandard2.0/Microsoft.SemanticKernel.Abstractions.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
     <Target>M:Microsoft.SemanticKernel.KernelFunctionMetadata.set_PluginName(System.String)</Target>
+    <Left>lib/netstandard2.0/Microsoft.SemanticKernel.Abstractions.dll</Left>
+    <Right>lib/netstandard2.0/Microsoft.SemanticKernel.Abstractions.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:Microsoft.SemanticKernel.KernelParameterMetadata.set_Description(System.String)</Target>
+    <Left>lib/netstandard2.0/Microsoft.SemanticKernel.Abstractions.dll</Left>
+    <Right>lib/netstandard2.0/Microsoft.SemanticKernel.Abstractions.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:Microsoft.SemanticKernel.KernelParameterMetadata.set_IsRequired(System.Boolean)</Target>
     <Left>lib/netstandard2.0/Microsoft.SemanticKernel.Abstractions.dll</Left>
     <Right>lib/netstandard2.0/Microsoft.SemanticKernel.Abstractions.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>

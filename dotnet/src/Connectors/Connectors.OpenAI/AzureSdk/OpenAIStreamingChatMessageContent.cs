@@ -43,6 +43,7 @@ public sealed class OpenAIStreamingChatMessageContent : StreamingChatMessageCont
     {
         this.ToolCallUpdate = chatUpdate.ToolCallUpdate;
         this.FinishReason = chatUpdate?.FinishReason;
+        this.ReasoningContent = chatUpdate?.ReasoningContentUpdate;
     }
 
     /// <summary>

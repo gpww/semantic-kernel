@@ -74,13 +74,19 @@ public abstract class KernelFunction
     /// The description may be supplied to a model in order to elaborate on the function's purpose,
     /// in case it may be beneficial for the model to recommend invoking the function.
     /// </remarks>
-    public string Description => this.Metadata.Description;
+    public string Description
+    {
+        get => this.Metadata.Description;
+        set => this.Metadata.Description = value;
+    }
 
     /// <summary>
     /// Gets the metadata describing the function.
     /// </summary>
     /// <returns>An instance of <see cref="KernelFunctionMetadata"/> describing the function</returns>
     public KernelFunctionMetadata Metadata { get; init; }
+
+    public IReadOnlyList<KernelParameterMetadata> Parameters => this.Metadata.Parameters;
 
     /// <summary>
     /// Gets the prompt execution settings.

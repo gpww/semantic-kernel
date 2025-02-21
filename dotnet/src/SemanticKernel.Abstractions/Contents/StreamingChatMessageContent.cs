@@ -20,6 +20,7 @@ public class StreamingChatMessageContent : StreamingKernelContent
     /// Text associated to the message payload
     /// </summary>
     public string? Content { get; set; }
+    public string? ReasoningContent { get; set; }
 
     /// <summary>
     /// Name of the author of the message

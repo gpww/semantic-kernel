@@ -3,7 +3,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 #pragma warning disable CA1033 // Interface methods should be callable by child types
@@ -161,8 +160,6 @@ public partial class ChatHistory : IList<ChatMessageContent>, IReadOnlyList<Chat
             this._messages[index] = value;
         }
     }
-
-    public virtual ChatMessageContent Last => this.Count > 0 ? this._messages.Last() : null;
 
     /// <summary>Determines whether a message is in the history.</summary>
     /// <param name="item">The message to locate.</param>

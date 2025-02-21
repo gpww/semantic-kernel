@@ -402,18 +402,22 @@ internal abstract class ClientCore
                         throw new KernelException("Chat completions not found");
                     }
                 }
-                catch (Exception ex) when (activity is not null)
+                catch (Exception ex)
                 {
-                    activity.SetError(ex);
-                    if (responseData != null)
+                    if (activity != null)
                     {
-                        // Capture available metadata even if the operation failed.
-                        activity
-                            .SetResponseId(responseData.Id)
-                            .SetPromptTokenUsage(responseData.Usage.PromptTokens)
-                            .SetCompletionTokenUsage(responseData.Usage.CompletionTokens);
+                        activity.SetError(ex);
+                        if (responseData != null)
+                        {
+                            // Capture available metadata even if the operation failed.
+                            activity
+                                .SetResponseId(responseData.Id)
+                                .SetPromptTokenUsage(responseData.Usage.PromptTokens)
+                                .SetCompletionTokenUsage(responseData.Usage.CompletionTokens);
+                        }
                     }
-                    throw;
+                    //this.Logger.LogError("{0}的网络请求出错", this.DeploymentOrModelName);
+                    throw new Exception($"{this.DeploymentOrModelName}的网络请求出错");
                 }
 
                 responseContent = responseData.Choices.Select(chatChoice => this.GetChatMessage(chatChoice, responseData)).ToList();
@@ -1468,6 +1472,16 @@ internal abstract class ClientCore
         catch (RequestFailedException e)
         {
             throw e.ToHttpOperationException();
+        }
+        catch (OperationCanceledException e)
+        {
+            // 处理任务取消异常
+            throw new TaskCanceledException("The operation was canceled.", e);
+        }
+        catch (Exception e)
+        {
+            // 处理其他异常
+            throw new HttpOperationException("An unexpected error occurred.", e);
         }
     }
 

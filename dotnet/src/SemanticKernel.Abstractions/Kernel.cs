@@ -405,8 +405,14 @@ public partial class Kernel
         CancellationToken cancellationToken = default)
     {
         Verify.NotNull(function);
-
-        return function.InvokeAsync(this, arguments, cancellationToken);
+        try
+        {
+            return function.InvokeAsync(this, arguments, cancellationToken);
+        }
+        catch (Exception e)
+        {
+            return Task.FromResult<FunctionResult>(new FunctionResult(function, e.Message));
+        }
     }
 
     /// <summary>

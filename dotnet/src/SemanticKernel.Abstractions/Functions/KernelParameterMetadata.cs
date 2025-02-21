@@ -57,7 +57,7 @@ public sealed class KernelParameterMetadata
     public string Description
     {
         get => this._description;
-        init
+        set
         {
             string newDescription = value ?? string.Empty;
             if (value != this._description && this._schema?.Inferred is true)
@@ -83,7 +83,7 @@ public sealed class KernelParameterMetadata
     }
 
     /// <summary>Gets whether the parameter is required.</summary>
-    public bool IsRequired { get; init; }
+    public bool IsRequired { get; set; }
 
     /// <summary>Gets the .NET type of the parameter.</summary>
     public Type? ParameterType

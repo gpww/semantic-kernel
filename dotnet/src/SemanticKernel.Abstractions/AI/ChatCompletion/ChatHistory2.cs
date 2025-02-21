@@ -28,7 +28,8 @@ public partial class ChatHistory
             return this._messages.FirstOrDefault(m => m.Role == AuthorRole.System);
         }
     }
-
+    public virtual ChatMessageContent Last => this._messages.LastOrDefault();//this.Count > 0 ? this._messages.Last() : null;
+    public virtual ChatMessageContent First => this._messages.FirstOrDefault();
     public virtual void UpdateSystemMessage(string content)
     {
         throw new NotImplementedException();
